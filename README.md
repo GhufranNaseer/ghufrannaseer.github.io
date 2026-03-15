@@ -79,14 +79,23 @@ The portfolio is deployed and accessible at: **[(https://ghufrannaseer.github.io
    - Intersection Observer for scroll animations
    - Lazy loading for project images
    - Reduced motion support for accessibility
+### 10. **Dynamic Blog System**
+   - Integration with external REST API (`my-blog-backend-phi.vercel.app`)
+   - Responsive carousel display with touch swipe support for mobile
+   - Skeleton loaders (shimmer effect) for both list and detail views
+   - Dedicated blog post page (`blog.html`) for full article reading
+   - Automated date formatting and content styling
+   - Category-based layouts with text clamping for clean UI
 
 ## 📁 Folder Structure
 
 ```
 ghufran-dev/
 ├── index.html              # Main HTML document with all page structure
-├── styles.css              # Complete styling with theme system
-├── script.js               # Application logic and interactivity
+├── blog.html               # Single blog post detail page
+├── styles.css              # Complete styling with theme system and skeletons
+├── script.js               # Main application logic and home page blog fetch
+├── blog.js                 # Dedicated logic for fetching and rendering single posts
 ├── README.md               # This file
 ├── replit.md               # Project documentation (Replit-specific)
 ├── .replit                 # Replit deployment configuration
@@ -247,8 +256,8 @@ For other hosting platforms (GitHub Pages, Netlify, Vercel, etc.):
 
 ## 🔮 Future Improvements
 
-- [ ] Backend API integration for form submission
-- [ ] Blog section for technical articles and tutorials
+- [x] Backend API integration for blog data
+- [x] Blog section for technical articles and tutorials
 - [ ] Project filtering by technology/category
 - [ ] Search functionality for projects and services
 - [ ] Client case studies with detailed metrics
@@ -309,6 +318,6 @@ Have questions or feedback about the portfolio?
 
 ---
 
-**Last Updated**: January 2024  
+**Last Updated**: March 2026  
 **Status**: Actively Maintained  
-**Version**: 1.0.0
+**Version**: 1.1.0
