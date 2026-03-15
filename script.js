@@ -771,6 +771,23 @@ function initApp() {
   
   console.log('Portfolio app initialized successfully!');
 }
+  fetch("https://my-blog-backend-phi.vercel.app/api/posts")
+      .then(response => response.json())
+      .then(data => {
+        const postsDiv = document.getElementById("posts");
+
+        data.forEach(post => {
+          postsDiv.innerHTML += `
+            <div style="border:1px solid #ccc; margin:10px; padding:10px;">
+              <h2>${post.title}</h2>
+              <p>${post.content}</p>
+            </div>
+          `;
+        });
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
 
 // Start the application
 initApp();
