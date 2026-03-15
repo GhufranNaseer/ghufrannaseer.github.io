@@ -771,23 +771,32 @@ function initApp() {
   
   console.log('Portfolio app initialized successfully!');
 }
-  fetch("https://my-blog-backend-phi.vercel.app/api/posts")
-      .then(response => response.json())
-      .then(data => {
-        const postsDiv = document.getElementById("posts");
+ document.addEventListener("DOMContentLoaded", function () {
+    const projectsGrid = document.querySelector(".projects-grid");
 
-        data.forEach(post => {
-          postsDiv.innerHTML += `
-            <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-              <h2>${post.title}</h2>
-              <p>${post.content}</p>
-            </div>
-          `;
+    fetch("https://my-blog-backend-phi.vercel.app/api/posts")
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.posts.length > 0) {
+                projectsGrid.innerHTML = "";
+
+                data.posts.forEach(post => {
+                    projectsGrid.innerHTML += `
+                        <div class="project-card">
+                            <img src="${post.coverImage}" alt="${post.title}" style="width:100%; border-radius:10px;">
+                            <div style="padding:15px;">
+                                <h3>${post.title}</h3>
+                                <p>${post.excerpt}</p>
+                                <small>${post.category}</small>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching projects:", error);
         });
-      })
-      .catch(error => {
-        console.error("Error fetching data:", error);
-      });
-
+});
 // Start the application
 initApp();
