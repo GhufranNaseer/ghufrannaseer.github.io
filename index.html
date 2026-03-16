@@ -4,19 +4,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muhammad Ghufran - Full Stack Developer</title>
+    <title>Muhammad Ghufran Naseer | Muhammad Ghufran | Full Stack Developer Portfolio | React, Node.js & AI Solutions
+    </title>
     <meta name="description"
-        content="Muhammad Ghufran - Full Stack Developer specializing in React.js, WordPress, AI Integration, and modern web applications. BSCS Graduate with 3+ years experience.">
+        content="Official portfolio of Muhammad Ghufran Naseer (Muhammad Ghufran), Full Stack Developer from Karachi, Pakistan. Specializing in React.js, Node.js, PostgreSQL, WordPress, and AI-powered solutions with 50+ completed projects.">
+    <meta name="keywords"
+        content="Muhammad Ghufran, Muhammad Ghufran Naseer, Full Stack Developer Pakistan, React Developer Karachi, Node.js Developer, AI Developer Pakistan, WordPress Developer Karachi, Portfolio Muhammad Ghufran">
+    <meta name="author" content="Muhammad Ghufran Naseer">
+    <meta name="robots" content="index, follow">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+        data-cf-beacon='{"token": "YOUR_TOKEN"}'></script><!-- End Cloudflare Web Analytics -->
 
     <!-- Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 
     <!-- EmailJS -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Muhammad Ghufran Naseer",
+      "url": "https://ghufrannaseer.github.io/ghufran-dev/",
+      "jobTitle": "Full Stack Developer",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Karachi",
+        "addressCountry": "Pakistan"
+      },
+      "email": "me.ghufrannaseer@gmail.com",
+      "sameAs": [
+        "https://github.com/GhufranNaseer",
+        "https://www.linkedin.com/in/ghufran-naseer/"
+      ]
+    }
+    </script>
 
     <!-- CSS -->
     <!-- <link rel="stylesheet" href="styles.css"> -->
@@ -85,17 +114,22 @@
             <div class="hero-grid">
                 <div class="hero-content">
                     <h1 class="hero-title" data-testid="hero-title">
-                        Hi, I'm <span class="text-primary">Muhammad Ghufran</span>
+                        Muhammad Ghufran Naseer
                     </h1>
+                    <h2 class="hero-subtitle-top"
+                        style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; color: var(--primary);">
+                        Full Stack Developer | React.js | Node.js | AI Solutions
+                    </h2>
                     <div class="typewriter-container">
                         <span class="text-primary typewriter-text" data-testid="typewriter-text"
                             id="typewriter-text"></span>
                         <span class="cursor">|</span>
                     </div>
                     <p class="hero-description" data-testid="hero-description">
-                        BSCS Graduate from Iqra University with ACCP Pro diploma. I specialize in creating modern web
-                        applications,
-                        EMS/CRM systems, and AI-powered solutions that help businesses grow and succeed.
+                        Muhammad Ghufran Naseer is a Full Stack Developer from Karachi, Pakistan, specializing in modern
+                        web
+                        applications, EMS/CRM systems, and AI-powered solutions. BSCS Graduate from Iqra University with
+                        ACCP Pro diploma.
                     </p>
                     <p class="hero-subtitle" data-testid="hero-subtitle">
                         Experienced in React.js, Node.js, PostgreSQL, WordPress with Elementor Pro, and AI integrations.
@@ -160,7 +194,7 @@
                 </p>
             </div>
 
-            <div class="services-grid">
+            <div class="services-grid" id="services-grid">
                 <!-- Service cards will be populated by JavaScript -->
             </div>
         </div>
@@ -176,7 +210,7 @@
                 </p>
             </div>
 
-            <div class="skills-grid" data-testid="skills-grid">
+            <div class="skills-grid" data-testid="skills-grid" id="skills-grid">
                 <!-- Skills will be populated by JavaScript -->
             </div>
         </div>
@@ -192,7 +226,7 @@
                 </p>
             </div>
 
-            <div class="projects-grid">
+            <div class="projects-grid" id="projects-grid">
                 <!-- Project cards will be populated by JavaScript -->
             </div>
         </div>
@@ -234,7 +268,7 @@
                 </p>
             </div>
 
-            <div class="testimonials-grid" data-testid="testimonials-grid">
+            <div class="testimonials-grid" data-testid="testimonials-grid" id="testimonials-grid">
                 <!-- Testimonials will be populated by JavaScript -->
             </div>
         </div>

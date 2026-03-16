@@ -1,4 +1,4 @@
-# Muhammad Ghufran - Full Stack Developer Portfolio
+# Muhammad Ghufran Naseer - Full Stack Developer Portfolio
 
 A modern, responsive personal portfolio website showcasing professional services, featured projects, technical expertise, and client testimonials. Built with vanilla HTML, CSS, and JavaScript for optimal performance and user experience.
 
@@ -228,8 +228,6 @@ For other hosting platforms (GitHub Pages, Netlify, Vercel, etc.):
 | Testimonials | Client feedback and ratings |
 | Contact | Email form with live chat support |
 
-*Screenshot assets located in `attached_assets/` folder*
-
 ## 🔮 Future Improvements
 
 - [x] Backend API integration for blog data
@@ -291,6 +289,8 @@ Have questions or feedback about the portfolio?
 - Open an issue on GitHub
 - Send an email to me.ghufrannaseer@gmail.com
 - Use the live chat widget available on the website
+
+---
 
 ---
 

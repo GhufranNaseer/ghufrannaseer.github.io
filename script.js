@@ -330,8 +330,9 @@ function initScrollAnimations() {
 
 // Services Section
 function renderServices() {
-  const servicesGrid = document.querySelector('.services-grid');
+  const servicesGrid = document.getElementById('services-grid');
   if (!servicesGrid) return;
+  servicesGrid.innerHTML = '';
 
   services.forEach((service, index) => {
     const serviceCard = createElement('div', 'card service-card');
@@ -386,8 +387,9 @@ function renderServices() {
 
 // Skills Section
 function renderSkills() {
-  const skillsGrid = document.querySelector('.skills-grid');
+  const skillsGrid = document.getElementById('skills-grid');
   if (!skillsGrid) return;
+  skillsGrid.innerHTML = '';
 
   skills.forEach((skill, index) => {
     const skillItem = createElement('div', 'skill-item');
@@ -431,8 +433,9 @@ function animateSkillBars() {
 
 // Projects Section
 function renderProjects() {
-  const projectsGrid = document.querySelector('.projects-grid');
+  const projectsGrid = document.getElementById('projects-grid');
   if (!projectsGrid) return;
+  projectsGrid.innerHTML = '';
 
   projects.forEach(project => {
     const projectCard = createElement('div', 'card project-card');
@@ -442,7 +445,7 @@ function renderProjects() {
     const imageContainer = createElement('div', 'project-image-container');
     const projectImage = createElement('img', 'project-image');
     projectImage.src = project.image;
-    projectImage.alt = `${project.title} - ${project.category} featuring ${project.tech.slice(0, 2).join(' and ')}`;
+    projectImage.alt = `Muhammad Ghufran Naseer Project: ${project.title} - ${project.category} built with ${project.tech.join(', ')}`;
     projectImage.loading = project.id <= 2 ? 'eager' : 'lazy';
     projectImage.setAttribute('data-testid', `project-image-${project.id}`);
 
@@ -486,8 +489,9 @@ function renderProjects() {
 
 // Testimonials Section
 function renderTestimonials() {
-  const testimonialsGrid = document.querySelector('.testimonials-grid');
+  const testimonialsGrid = document.getElementById('testimonials-grid');
   if (!testimonialsGrid) return;
+  testimonialsGrid.innerHTML = '';
 
   testimonials.forEach((testimonial, index) => {
     const testimonialCard = createElement('div', 'card testimonial-card');
@@ -812,7 +816,7 @@ document.addEventListener("DOMContentLoaded", function () {
           blogsGrid.innerHTML += `
                         <div class="card project-card">
                             <div class="project-image-container">
-                                <img class="project-image" src="${post.coverImage}" alt="${post.title}">
+                                <img class="project-image" src="${post.coverImage}" alt="Muhammad Ghufran Naseer Blog: ${post.title}" loading="lazy">
                             </div>
                             <div class="project-content">
                                 <h3 class="project-title">${post.title}</h3>
