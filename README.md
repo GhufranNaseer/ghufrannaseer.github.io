@@ -4,7 +4,7 @@ A modern, responsive personal portfolio website showcasing professional services
 
 ## 🌐 Live Demo
 
-The portfolio is deployed and accessible at: **[(https://ghufrannaseer.github.io/ghufran-dev/)]** *(deployment URL to be configured)*
+The portfolio is deployed and accessible at: **[(https://ghufrannaseer.github.io/muhammad-ghufran-naseer/)]** *(deployment URL to be configured)*
 
 
 
@@ -90,7 +90,7 @@ The portfolio is deployed and accessible at: **[(https://ghufrannaseer.github.io
 ## 📁 Folder Structure
 
 ```
-ghufran-dev/
+muhammad-ghufran-naseer/
 ├── index.html              # Main HTML document with all page structure
 ├── blog.html               # Single blog post detail page
 ├── styles.css              # Complete styling with theme system and skeletons
@@ -113,8 +113,8 @@ ghufran-dev/
 
 1. **Clone the repository** (if applicable):
    ```bash
-   git clone https://github.com/GhufranNaseer/ghufran-dev.git
-   cd ghufran-dev
+   git clone https://github.com/GhufranNaseer/muhammad-ghufran-naseer.git
+   cd muhammad-ghufran-naseer
    ```
 
 2. **Start a local web server**:
