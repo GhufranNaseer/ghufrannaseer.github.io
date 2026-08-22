@@ -53,6 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
             day: 'numeric'
         });
         document.getElementById('blog-date').textContent = dateString;
+        document.getElementById('blog-author').textContent = post.author?.name || 'Muhammad Ghufran';
 
         // 5. Format and inject the Content
         const formattedContent = post.content
