@@ -13,8 +13,8 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    // 2. Fetch the post data
-    fetch("https://my-blog-backend-phi.vercel.app/api/posts")
+    // 2. Fetch ONLY Ghufran's posts
+    fetch("https://my-blog-backend-phi.vercel.app/api/posts?author=ghufran")
         .then(response => response.json())
         .then(data => {
             if (data.success && data.posts && data.posts.length > 0) {
