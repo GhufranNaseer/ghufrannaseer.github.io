@@ -806,7 +806,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   renderBlogSkeletons();
 
-  fetch("https://my-blog-backend-phi.vercel.app/api/posts")
+  fetch("https://my-blog-backend-phi.vercel.app/api/posts?author=ghufran")
     .then(response => response.json())
     .then(data => {
       if (data.success && data.posts.length > 0) {
