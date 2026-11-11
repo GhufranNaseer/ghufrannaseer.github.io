@@ -9,33 +9,54 @@ import {
   estimateReadingTime,
   readPosts,
   slugify,
+  stripHtml,
   writePosts,
 } from './lib/utils.mjs';
 
 dns.setDefaultResultOrder('ipv4first');
-import { renderCoverImage } from './render-cover.mjs';
+import { renderCoverImage, sanitizeSvgMarkup } from './render-cover.mjs';
 import { buildAllBlogPages } from './build-blog.mjs';
 
-const DOMAINS = [
+const TOPIC_PILLARS = [
   {
-    category: 'DevOps & Kubernetes',
-    focus: 'Kubernetes workloads, Docker optimization, CI/CD pipelines, GitOps, observability, zero-downtime deployments, Linux/Nginx production tuning',
+    category: 'Full Stack Engineering',
+    focus: 'Laravel, PHP, React, JavaScript, REST/GraphQL APIs, state synchronization, form concurrency, local-vs-production environment mismatches',
   },
   {
-    category: 'Cybersecurity & Production Engineering',
-    focus: 'Runtime vulnerability remediation, API authentication & JWT/OAuth2 hardening, SSRF/SQLi prevention, secrets management, supply-chain security, incident reliability',
+    category: 'Enterprise Systems & Automation',
+    focus: 'ERP/PMS data integrity, inventory reconciliation, idempotent approval workflows, audit trails, background queues on constrained servers',
   },
   {
-    category: 'Backend & System Architecture',
-    focus: 'Idempotent REST APIs, PostgreSQL indexing & query optimization, Redis caching patterns, message queues, rate limiting, webhooks, Laravel/Node.js service boundaries',
+    category: 'AI Integration & Agents',
+    focus: 'Production RAG reliability, structured output validation, AI agent failure modes beyond demos, tool-call guardrails, latency and fallback routing',
   },
   {
-    category: 'Full Stack & Web Performance',
-    focus: 'Core Web Vitals & LCP optimization, React state/rendering performance, TypeScript API contracts, HTTP caching & CDN strategies, accessible UI architecture',
+    category: 'DevOps & Production Infrastructure',
+    focus: 'Docker resource limits, VPS hosting constraints, reverse proxies, zero-downtime deployments, CI/CD failure gates, environment drift',
   },
   {
-    category: 'AI Integration & Engineering Automation',
-    focus: 'Production RAG architectures, structured LLM outputs & validation, multi-model fallback & rate-limiting, evaluation pipelines, developer workflow automation',
+    category: 'Database Architecture & Recovery',
+    focus: 'PostgreSQL/MySQL indexing and execution plans, locking & race conditions, backup verification vs actual disaster recovery, safe schema migrations',
+  },
+  {
+    category: 'Web Performance & Scalability',
+    focus: 'Core Web Vitals (LCP, INP, CLS), N+1 query bottlenecks, caching invalidation traps, payload budgeting, main-thread blocking diagnosis',
+  },
+  {
+    category: 'Software Architecture & Multi-Tenancy',
+    focus: 'Multi-tenant data isolation, modular monolith vs microservices trade-offs, boundary contracts, event-driven decoupling, failure containment',
+  },
+  {
+    category: 'WordPress Engineering & Migrations',
+    focus: 'Zero-downtime WordPress migrations, Elementor/plugin performance bloat, database serialization pitfalls, security hardening, headless trade-offs',
+  },
+  {
+    category: 'API Integrations & Security',
+    focus: 'Debugging flaky third-party APIs, webhook signature verification & replay protection, OAuth/JWT rotation, rate-limit backoff, SSRF/IDOR prevention',
+  },
+  {
+    category: 'Engineering Workflows & Maintainability',
+    focus: 'Managing changing requirements, legacy code refactoring without rewrites, regression testing strategies, observability and post-incident debugging',
   },
 ];
 
@@ -155,7 +176,7 @@ function httpsPostJson(urlString, bodyObj, timeoutMs = 90000) {
         res.on('end', () => {
           try {
             resolve({ status: res.statusCode || 0, data: JSON.parse(raw) });
-          } catch (e) {
+          } catch {
             reject(new Error(`Invalid JSON (HTTP ${res.statusCode}): ${raw.slice(0, 200)}`));
           }
         });
@@ -168,17 +189,17 @@ function httpsPostJson(urlString, bodyObj, timeoutMs = 90000) {
   });
 }
 
-async function callGeminiJson(apiKey, prompt) {
+async function callGeminiJson(apiKey, prompt, temperature = 0.7) {
   let lastError = null;
 
   for (const model of MODELS) {
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
     try {
-      console.log(`Generating article with ${model}...`);
+      console.log(`Calling ${model}...`);
       const { status, data } = await httpsPostJson(endpoint, {
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature: 0.7,
+          temperature,
           maxOutputTokens: 8192,
           responseMimeType: 'application/json',
         },
@@ -207,102 +228,173 @@ async function callGeminiJson(apiKey, prompt) {
   throw lastError || new Error('All Gemini models failed');
 }
 
-function buildPrompt({ domain, preferredStyle, existingTitles, todayIso }) {
-  const existingList = existingTitles.map((t, i) => `${i + 1}. ${t}`).join('\n');
+/**
+ * Pick a domain pillar not recently covered in the latest posts so topics rotate naturally.
+ */
+function selectNextPillar(existingPosts) {
+  const recentCategories = new Set(
+    existingPosts.slice(0, 5).map((p) => String(p.category || '').toLowerCase())
+  );
 
-  const coverSchemaGuide =
-    preferredStyle === 'architecture'
-      ? `{
-    "style": "architecture",
-    "badgeLeft": "SHORT UPPERCASE LABEL (e.g. BACKEND ARCHITECTURE • PATTERNS)",
-    "badgeRight": "SHORT RIGHT PILL (e.g. 3 PATTERNS • PRODUCTION)",
-    "titleParts": [
-      { "text": "Concept A", "accent": "blue" },
-      { "text": "vs", "accent": "muted" },
-      { "text": "Concept B", "accent": "emerald" },
-      { "text": "vs", "accent": "muted" },
-      { "text": "Concept C", "accent": "orange" }
-    ],
-    "columns": [
-      {
-        "title": "Short Card Title",
-        "tag": "3-4 WORD UPPERCASE TAG",
-        "accent": "blue",
-        "nodes": [
-          { "label": "layer-1", "spec": "short monospace detail" },
-          { "label": "layer-2", "spec": "short monospace detail" },
-          { "label": "layer-3", "spec": "short monospace detail" }
-        ],
-        "summary": "One crisp 6-9 word takeaway line",
-        "useFor": "SHORT USE CASE"
-      }
-    ]
-  }
-  (Provide exactly 3 columns with accents: "blue", "emerald", "orange". Keep every string super concise so it fits cleanly inside 1200x630 without overflow!)`
-      : `{
-    "style": "infographic",
-    "eyebrow": "SHORT UPPERCASE TOPIC (e.g. PRODUCTION SECURITY)",
-    "headline": "Short Bold 4-7 Word Headline",
-    "highlightWord": "1-2 key words from headline",
-    "subtitle": "One crisp sentence summarizing the engineering lesson.",
-    "highlights": [
-      { "icon": "shield", "title": "Short Title 1", "detail": "2-line concise detail max 60 chars" },
-      { "icon": "code", "title": "Short Title 2", "detail": "2-line concise detail max 60 chars" },
-      { "icon": "alert", "title": "Short Title 3", "detail": "2-line concise detail max 60 chars" }
-    ],
-    "takeaway": "A sharp reminder that reliability isn't just about ",
-    "takeawayHighlight": "writing code — it's verifying production state.",
-    "pillars": ["Pillar 1", "Pillar 2", "Pillar 3", "Pillar 4"],
-    "panelTitle": "verify-runtime.sh",
-    "panelStatus": "VERIFIED",
-    "panelTopic": "Short Panel Header",
-    "panelSubtopic": "Short 4-6 word subtext",
-    "panelLines": [
-      { "key": "check-1", "value": "PASS", "status": "ok" },
-      { "key": "latency-p95", "value": "18ms", "status": "ok" },
-      { "key": "retry-budget", "value": "3x exp", "status": "info" },
-      { "key": "drift-state", "value": "0 gaps", "status": "ok" }
-    ],
-    "footerTag": "DESIGN / VERIFY / OPERATE"
-  }`;
+  const unusedRecent = TOPIC_PILLARS.filter(
+    (pillar) => !recentCategories.has(pillar.category.toLowerCase())
+  );
 
-  return `You are a senior software & DevOps engineer writing an industrial-grade technical blog post for Muhammad Ghufran Naseer's engineering portfolio (${todayIso}).
+  const pool = unusedRecent.length > 0 ? unusedRecent : TOPIC_PILLARS;
+  return pool[existingPosts.length % pool.length];
+}
 
-TARGET DOMAIN: ${domain.category}
-TOPIC AREAS: ${domain.focus}
+function buildArticlePrompt({ pillar, existingPosts, todayIso }) {
+  const existingSummary = existingPosts
+    .map((p, i) => `${i + 1}. [${p.category || 'General'}] ${p.title} — ${(p.excerpt || '').slice(0, 110)}`)
+    .join('\n');
 
-EXISTING BLOG TITLES (DO NOT REPEAT OR CLOSELY OVERLAP THESE):
-${existingList || '(none yet)'}
+  return `You are a pragmatic Senior Full Stack & Systems Engineer writing an original technical article for Muhammad Ghufran Naseer's engineering portfolio (${todayIso}).
 
-WRITING & QUALITY RULES:
-1. Pick a specific, practical, high-signal engineering topic inside "${domain.category}" that developers and engineering leads care about in production.
-2. Do NOT fabricate fake personal anecdotes about specific companies or clients. Frame everything from solid first-principles engineering, production patterns, trade-offs, and actionable architecture.
-3. Structure the HTML article body ("contentHtml") cleanly using ONLY semantic HTML tags: <h2>, <h3>, <p>, <ul>, <ol>, <li>, <strong>, <code>, <pre><code>, <blockquote>, and <div class="table-wrap"><table><thead><tr><th>...</th></tr></thead><tbody><tr><td>...</td></tr></tbody></table></div>.
-4. Include:
-   - An engaging 2-3 paragraph introduction explaining the real production problem and why it matters.
-   - 4 to 5 well-structured <h2> sections (numbered or clearly titled) with <h3> subsections where helpful, concrete bullet lists ("Key Features", "Common Operational Mistakes", or "Production Checklist"), and either a practical comparison table OR a concise realistic code/config snippet in <pre><code>.
-   - A "Common Mistakes to Avoid" or "Engineering Lessons" section.
-   - A crisp "Conclusion" with a memorable 3-line summary ("Remember: ...").
-5. Aim for 900–1300 words of crisp, readable, non-fluffy technical prose.
-6. Also write a natural, human-sounding LinkedIn post ("linkedinPost", 900–1500 characters) summarizing the article for software engineers, formatted cleanly with line breaks:
-   - Line 1: Bold-style hook title (plain text, no markdown asterisks)
-   - Short 2-line opening context
-   - "Key Architecture Highlights:" followed by 3–4 numbered takeaways (1., 2., 3., 4.)
-   - "Engineering Perspective:" with 3–4 short crisp lines
-   - Closing takeaway line
-   - 5–7 relevant hashtags at the bottom (e.g. #SystemDesign #BackendEngineering #DevOps)
-   (Do NOT include any URL placeholder in linkedinPost — our publisher script appends the live article URL cleanly.)
-7. Return strictly valid JSON matching this schema:
+SUGGESTED DOMAIN PILLAR: ${pillar.category}
+RELEVANT FOCUS AREAS: ${pillar.focus}
+(You may also bridge across adjacent domains or emerging real-world engineering challenges when it produces a stronger, non-overlapping problem.)
+
+EXISTING PUBLISHED ARTICLES — ANALYZE CAREFULLY & DO NOT OVERLAP OR REWORD THESE TOPICS:
+${existingSummary || '(none yet)'}
+
+CONTENT STRATEGY & TOPIC SELECTION:
+1. Choose a specific, practical, real-world engineering problem that software engineers, technical founders, or engineering teams actually encounter in production (for example: why systems pass locally yet fail in production, inventory/ledger drift under concurrency, backup vs verified recovery, multi-tenant data boundary leaks, third-party webhook failure handling, background jobs on constrained VPS infrastructure, WordPress migration/serialization pitfalls, or why AI agents break outside simple demos). Do NOT copy those exact titles — invent a fresh, specific angle not already covered above.
+2. NEVER write generic "What is X?" or "Introduction to X" beginner tutorials or repetitive SEO fluff.
+3. Demonstrate genuine engineering judgment:
+   - Diagnose root causes and failure modes.
+   - Explain the architecture, implementation approach, and trade-offs.
+   - Include realistic, accurate code, SQL, or configuration snippets in <pre><code> where they genuinely clarify the fix.
+   - Highlight common anti-patterns and operational considerations (security, concurrency, performance, observability, maintainability) naturally where relevant — do NOT force identical boilerplate headings into every post.
+
+STRICT AUTHENTICITY & CREDIBILITY RULES:
+- NO hype, buzzwords ("revolutionary", "game-changing"), or generic AI-sounding filler.
+- NEVER invent fake client stories, fabricated company names, or made-up benchmark numbers (e.g., do not claim "cut latency by 83% for a Fortune 500 client").
+- Do not claim unimplemented personal experience; frame insights from sound engineering principles, documented platform behavior, and anonymized real-world architectural patterns.
+
+HTML & LINKEDIN FORMAT RULES:
+- Use ONLY semantic HTML tags in "contentHtml": <h2>, <h3>, <p>, <ul>, <ol>, <li>, <strong>, <code>, <pre><code>, <blockquote>, and <div class="table-wrap"><table><thead><tr><th>...</th></tr></thead><tbody><tr><td>...</td></tr></tbody></table></div>.
+- Aim for 950–1350 words of crisp, readable technical writing with a clear problem statement and a grounded closing takeaway.
+- Write "linkedinPost" (900–1450 characters, plain text, no markdown asterisks) tailored for technical leads, recruiters, and engineers:
+  - Opening hook naming the real engineering problem
+  - Concise context (2 lines)
+  - 3–4 numbered technical insights (1., 2., 3., 4.)
+  - Short closing engineering principle
+  - 4–6 relevant hashtags at the very bottom
+  (Do NOT include any URL placeholder in linkedinPost; our publisher appends the live article URL automatically.)
+
+Return strictly valid JSON:
 {
-  "title": "Clear, specific SEO-friendly article title (max 85 chars)",
-  "excerpt": "Compelling 1-2 sentence summary (130-165 chars) for article cards and meta description",
-  "category": "${domain.category}",
+  "title": "Specific, credible engineering title (max 85 chars)",
+  "excerpt": "Crisp 1-2 sentence problem summary (130-165 chars)",
+  "category": "${pillar.category}",
   "tags": ["Tag1", "Tag2", "Tag3", "Tag4"],
   "seoKeywords": ["keyword 1", "keyword 2", "keyword 3", "keyword 4", "keyword 5"],
   "contentHtml": "<p>...</p><h2>...</h2>...",
   "linkedinPost": "...",
-  "coverSpec": ${coverSchemaGuide}
+  "fallbackCover": {
+    "eyebrow": "SHORT UPPERCASE TOPIC",
+    "headline": "4-6 Word Visual Headline",
+    "highlightWord": "1-2 key words",
+    "subtitle": "Concise 1-line summary",
+    "highlights": [
+      { "icon": "layers", "title": "Root Cause", "detail": "Max 55 chars" },
+      { "icon": "code", "title": "Mechanism", "detail": "Max 55 chars" },
+      { "icon": "shield", "title": "Safeguard", "detail": "Max 55 chars" }
+    ],
+    "takeaway": "Core engineering principle: ",
+    "takeawayHighlight": "short key insight.",
+    "pillars": ["Concept 1", "Concept 2", "Concept 3"],
+    "panelTitle": "diagnostics.log",
+    "panelStatus": "ANALYZED",
+    "panelTopic": "System State",
+    "panelSubtopic": "Short 4-word summary",
+    "panelLines": [
+      { "key": "check-1", "value": "VALUE", "status": "ok" },
+      { "key": "check-2", "value": "VALUE", "status": "warn" },
+      { "key": "check-3", "value": "VALUE", "status": "info" }
+    ]
+  }
 }`;
+}
+
+function extractArticleDigest(article) {
+  const headings = [...String(article.contentHtml || '').matchAll(/<h2[^>]*>(.*?)<\/h2>/gi)]
+    .map((m) => stripHtml(m[1]))
+    .filter(Boolean);
+  const plainSummary = stripHtml(article.contentHtml || '').slice(0, 1800);
+  return { headings, plainSummary };
+}
+
+function buildVisualArchitectPrompt(article) {
+  const { headings, plainSummary } = extractArticleDigest(article);
+
+  return `You are a Principal Technical Illustrator & Information Designer creating a bespoke 1200x630 cover diagram for a software engineering article.
+
+ARTICLE TO VISUALIZE:
+- Title: ${article.title}
+- Category: ${article.category}
+- Excerpt: ${article.excerpt}
+- Main Sections: ${headings.join(' | ')}
+- Technical Digest: ${plainSummary}
+
+YOUR MISSION:
+Analyze the actual technical mechanism, failure mode, or architecture in this article, and design ONE custom, educational, publication-grade inline SVG diagram (<svg viewBox="0 0 1120 440" xmlns="http://www.w3.org/2000/svg">) that visually teaches that exact concept.
+
+CHOOSE THE VISUAL APPROACH THAT FITS THIS TOPIC BEST (do NOT force every topic into 3 columns):
+- Infrastructure / Kubernetes / Containers -> Cluster boundary, Control Plane, Worker Nodes, Pods, Service routing arrows.
+- Web Performance (LCP, INP, Hydration) -> Horizontal browser/main-thread timeline bars comparing blocking work vs optimized critical path.
+- CI/CD / Deployment / Migration -> Connected stage pipeline with validation gates and failure/rollback branch.
+- Database / Indexing / Locking -> Query execution tree (Seq Scan vs B-Tree Index lookup) or transaction timeline showing race condition vs lock/atomic update.
+- Multi-Tenant / Security / APIs -> Request flow crossing tenant/auth boundary walls, token validation, rate limiter, webhook idempotency ledger.
+- AI Agents / RAG -> Execution loop (Query -> Retrieval/Tools -> Schema Validator -> Deterministic Output / Fallback branch).
+- ERP / Approval / State Machines -> State nodes, transition guards, ledger reconciliation flow.
+
+STRICT VISUAL & SVG CRAFTSMANSHIP RULES:
+1. Viewport is EXACTLY viewBox="0 0 1120 440". Keep ALL shapes and text inside x: 24..1096 and y: 20..420 so nothing ever clips.
+2. Minimal, crisp text ONLY: short labels (1–4 words), generous padding inside boxes (at least 16px margin from edges), font-family="Inter, Arial, sans-serif", font-size between 11 and 16. NEVER overlap text and shapes.
+3. Choose theme "light" or "dark" based on what makes the diagram clearest:
+   - If "light": surface background is #ffffff, use crisp slate borders (#cbd5e1, #94a3b8), dark ink (#0f172a), muted (#475569), subtle fills (#f8fafc, #eff6ff, #ecfdf5, #fffbeb, #fef2f2), accents (#1d4ed8 royal blue, #059669 emerald, #d97706 amber, #dc2626 red for errors/bottlenecks).
+   - If "dark": surface background is #0f1625, use crisp subtle borders (#334155, #475569), light ink (#f8fafc), muted (#94a3b8), node fills (#162033, #111827), accents (#60a5fa cobalt, #34d399 emerald, #fbbf24 amber, #f87171 red for errors/bottlenecks).
+4. Include clear directional connectors (<defs><marker id="arrow" ...>...</marker></defs>) or timeline tracks so the viewer understands relationships, cause-and-effect, or data flow at a glance.
+5. NO <script>, NO <foreignObject>, NO external URLs (http/https), NO tacky clipart or random decorative circles. Pure clean architectural diagramming.
+
+Return strictly valid JSON:
+{
+  "conceptAnalysis": "1 sentence describing the exact technical mechanism depicted",
+  "visualTypeLabel": "SHORT 1-3 WORD BADGE (e.g. QUERY PLAN, FRAME TIMELINE, CLUSTER TOPOLOGY, STATE FLOW, PIPELINE GATE)",
+  "theme": "light" or "dark",
+  "title": "Concise diagram title (max 68 chars)",
+  "subtitle": "Short 1-line educational caption (max 85 chars)",
+  "svgMarkup": "<svg viewBox=\\"0 0 1120 440\\" xmlns=\\"http://www.w3.org/2000/svg\\">...</svg>"
+}`;
+}
+
+async function designTopicVisual(apiKey, article) {
+  try {
+    const visualSpec = await callGeminiJson(apiKey, buildVisualArchitectPrompt(article), 0.55);
+    const cleanedSvg = sanitizeSvgMarkup(visualSpec?.svgMarkup || '');
+    if (!cleanedSvg) {
+      throw new Error('Visual architect returned empty or invalid SVG markup');
+    }
+    return {
+      mode: 'custom-svg',
+      category: article.category,
+      theme: visualSpec.theme === 'dark' ? 'dark' : 'light',
+      visualTypeLabel: visualSpec.visualTypeLabel || 'ARCHITECTURE',
+      title: visualSpec.title || article.title,
+      subtitle: visualSpec.subtitle || '',
+      svgMarkup: cleanedSvg,
+      fallbackSpec: article.fallbackCover || {},
+    };
+  } catch (err) {
+    console.warn(`Stage 2 custom visual generation fell back: ${err.message}`);
+    return article.fallbackCover || {
+      eyebrow: article.category,
+      headline: article.title,
+      subtitle: article.excerpt,
+    };
+  }
 }
 
 async function main() {
@@ -312,34 +404,35 @@ async function main() {
   }
 
   const existingPosts = readPosts();
-  const domainIndex = existingPosts.length % DOMAINS.length;
-  const domain = DOMAINS[domainIndex];
-  const preferredStyle = existingPosts.length % 2 === 0 ? 'architecture' : 'infographic';
+  const pillar = selectNextPillar(existingPosts);
   const todayIso = new Date().toISOString().slice(0, 10);
 
-  const existingTitles = existingPosts.map((p) => p.title);
-  const existingSlugs = new Set(existingPosts.map((p) => p.slug));
-
-  const generated = await callGeminiJson(apiKey, buildPrompt({
-    domain,
-    preferredStyle,
-    existingTitles,
-    todayIso,
-  }));
+  console.log(`Stage 1: Generating problem-driven article (pillar: ${pillar.category})...`);
+  const generated = await callGeminiJson(
+    apiKey,
+    buildArticlePrompt({ pillar, existingPosts, todayIso }),
+    0.72
+  );
 
   if (!generated?.title || !generated?.contentHtml) {
     throw new Error('Generated JSON missing required title or contentHtml');
   }
 
+  const existingSlugs = new Set(existingPosts.map((p) => p.slug));
   let slug = slugify(generated.title);
   if (!slug) slug = `engineering-post-${Date.now()}`;
   if (existingSlugs.has(slug)) {
     slug = `${slug}-${todayIso}`;
   }
 
-  console.log(`Rendering cover diagram (${generated.coverSpec?.style || preferredStyle}) for ${slug}...`);
+  console.log(`Stage 2: Designing topic-specific technical diagram for "${generated.title}"...`);
+  const coverSpec = await designTopicVisual(apiKey, {
+    ...generated,
+    category: generated.category || pillar.category,
+  });
+
   const linkedinCoverPngPath = path.join(ROOT_DIR, '.linkedin-cover.png');
-  const coverImage = await renderCoverImage(slug, generated.coverSpec, {
+  const coverImage = await renderCoverImage(slug, coverSpec, {
     tempPngPath: linkedinCoverPngPath,
   });
 
@@ -350,10 +443,10 @@ async function main() {
     title: generated.title.trim(),
     excerpt: (generated.excerpt || '').trim(),
     contentHtml: generated.contentHtml.trim(),
-    category: generated.category || domain.category,
+    category: generated.category || pillar.category,
     tags: Array.isArray(generated.tags) && generated.tags.length > 0
       ? generated.tags.slice(0, 6)
-      : [domain.category],
+      : [pillar.category],
     seo: {
       metaDescription: (generated.excerpt || generated.title).trim(),
       keywords: Array.isArray(generated.seoKeywords) ? generated.seoKeywords : generated.tags || [],
@@ -369,7 +462,7 @@ async function main() {
   writePosts([newPost, ...existingPosts]);
   buildAllBlogPages();
 
-  // Store metadata for industrial-grade Conventional Commit & LinkedIn publishing in GitHub Actions
+  // Store metadata for Conventional Commit & LinkedIn publishing in GitHub Actions
   const blogUrl = `${SITE_URL}/blog/${newPost.slug}/`;
   const commitMeta = {
     title: newPost.title,

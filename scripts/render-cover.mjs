@@ -12,30 +12,26 @@ const ACCENT_PALETTE = {
   blue: {
     border: '#bfdbfe',
     bg: '#eff6ff',
-    solid: '#2563eb',
-    text: '#1d4ed8',
-    pillBg: '#ffffff',
+    solid: '#1d4ed8',
+    text: '#1e40af',
   },
   emerald: {
     border: '#a7f3d0',
     bg: '#ecfdf5',
     solid: '#059669',
     text: '#047857',
-    pillBg: '#ffffff',
   },
   orange: {
     border: '#fed7aa',
     bg: '#fff7ed',
-    solid: '#ea580c',
-    text: '#c2410c',
-    pillBg: '#ffffff',
+    solid: '#d97706',
+    text: '#b45309',
   },
   violet: {
     border: '#ddd6fe',
     bg: '#f5f3ff',
-    solid: '#7c3aed',
-    text: '#6d28d9',
-    pillBg: '#ffffff',
+    solid: '#6d28d9',
+    text: '#5b21b6',
   },
 };
 
@@ -52,12 +48,115 @@ function getIconSvg(name = 'layers', color = '#38bdf8') {
   return icons[name] || icons.layers;
 }
 
+/**
+ * Strip potentially unsafe tags, event handlers, and external network URLs
+ * so headless Chromium renders bespoke SVG diagrams deterministically offline.
+ */
+export function sanitizeSvgMarkup(rawSvg = '') {
+  let svg = String(rawSvg || '').trim();
+  const match = svg.match(/<svg[\s\S]*<\/svg>/i);
+  if (!match) return '';
+  svg = match[0];
+
+  svg = svg
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '')
+    .replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
+    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+    .replace(/(?:href|xlink:href|src)\s*=\s*("https?:\/\/[^"]*"|'https?:\/\/[^']*'|javascript:[^"'\s>]*)/gi, '')
+    .replace(/url\(\s*['"]?https?:\/\/[^)]+\)/gi, 'none');
+
+  // Ensure consistent responsive sizing inside our 1120x440 diagram stage
+  svg = svg.replace(/<svg\b([^>]*)>/i, (_, attrs) => {
+    let cleanAttrs = attrs
+      .replace(/\bwidth\s*=\s*("[^"]*"|'[^']*')/gi, '')
+      .replace(/\bheight\s*=\s*("[^"]*"|'[^']*')/gi, '')
+      .replace(/\bstyle\s*=\s*("[^"]*"|'[^']*')/gi, '');
+    if (!/\bviewBox\s*=/i.test(cleanAttrs)) {
+      cleanAttrs += ' viewBox="0 0 1120 440"';
+    }
+    return `<svg${cleanAttrs} width="1120" height="440" style="display:block;width:100%;height:100%;max-width:1120px;max-height:440px;">`;
+  });
+
+  return svg;
+}
+
+/**
+ * Brand-consistent wrapper around a topic-specific SVG technical diagram.
+ */
+function buildCustomSvgHtml(spec) {
+  const isDark = spec.theme === 'dark';
+  const svg = sanitizeSvgMarkup(spec.svgMarkup || '');
+  if (!svg) return null;
+
+  const palette = isDark
+    ? {
+        bg: '#090d16',
+        bgGrid: 'rgba(148, 163, 184, 0.06)',
+        surface: '#0f1625',
+        border: 'rgba(148, 163, 184, 0.18)',
+        ink: '#f8fafc',
+        muted: '#94a3b8',
+        pillBg: 'rgba(96, 165, 250, 0.14)',
+        pillBorder: 'rgba(96, 165, 250, 0.32)',
+        pillText: '#93c5fd',
+        typeBg: 'rgba(148, 163, 184, 0.1)',
+        typeText: '#cbd5e1',
+      }
+    : {
+        bg: '#f8fafc',
+        bgGrid: 'rgba(15, 23, 42, 0.05)',
+        surface: '#ffffff',
+        border: '#e2e8f0',
+        ink: '#0f172a',
+        muted: '#475569',
+        pillBg: '#eff6ff',
+        pillBorder: '#bfdbfe',
+        pillText: '#1d4ed8',
+        typeBg: '#f1f5f9',
+        typeText: '#334155',
+      };
+
+  const category = escapeHtml(spec.category || 'Engineering');
+  const visualLabel = escapeHtml(spec.visualTypeLabel || 'ARCHITECTURE');
+  const title = escapeHtml(spec.title || 'Engineering Architecture');
+  const subtitle = escapeHtml(spec.subtitle || '');
+
+  return `<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;width:1200px;height:630px;overflow:hidden;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background-color:${palette.bg};background-image:linear-gradient(to right,${palette.bgGrid} 1px,transparent 1px),linear-gradient(to bottom,${palette.bgGrid} 1px,transparent 1px);background-size:32px 32px;color:${palette.ink};box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;padding:24px 40px 20px;">
+  <header style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:1px solid ${palette.border};padding-bottom:14px;">
+    <div style="min-width:0;flex:1;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <span style="background:${palette.pillBg};border:1px solid ${palette.pillBorder};color:${palette.pillText};padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;">${category}</span>
+        ${subtitle ? `<span style="font-size:13px;color:${palette.muted};font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${subtitle}</span>` : ''}
+      </div>
+      <h1 style="margin:0;font-size:26px;font-weight:800;line-height:1.18;letter-spacing:-0.025em;color:${palette.ink};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${title}</h1>
+    </div>
+    <div style="background:${palette.typeBg};border:1px solid ${palette.border};color:${palette.typeText};padding:5px 12px;border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;flex-shrink:0;margin-top:4px;">
+      ${visualLabel}
+    </div>
+  </header>
+
+  <main style="width:1120px;height:440px;margin:12px auto;background:${palette.surface};border:1px solid ${palette.border};border-radius:14px;overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px -10px rgba(15,23,42,${isDark ? '0.6' : '0.08'});">
+    ${svg}
+  </main>
+
+  <footer style="display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:${palette.muted};font-weight:600;padding-top:4px;">
+    <span>Muhammad Ghufran Naseer &middot; Engineering Notes</span>
+    <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">ghufrannaseer.github.io</span>
+  </footer>
+</body>
+</html>`;
+}
+
 function buildArchitectureHtml(spec) {
   const badgeLeft = escapeHtml(spec.badgeLeft || 'SYSTEM ARCHITECTURE • GUIDE');
   const badgeRight = escapeHtml(spec.badgeRight || 'PRODUCTION READY');
   const titleParts = Array.isArray(spec.titleParts) && spec.titleParts.length > 0
     ? spec.titleParts
-    : [{ text: spec.headline || 'Engineering Architecture', accent: 'blue' }];
+    : [{ text: spec.headline || spec.title || 'Engineering Architecture', accent: 'blue' }];
 
   const titleHtml = titleParts
     .map((part) => {
@@ -151,22 +250,22 @@ function buildArchitectureHtml(spec) {
 }
 
 function buildInfographicHtml(spec) {
-  const eyebrow = escapeHtml(spec.eyebrow || 'ENGINEERING DEEP DIVE');
-  const headline = escapeHtml(spec.headline || 'Production Engineering');
+  const eyebrow = escapeHtml(spec.eyebrow || spec.category || 'ENGINEERING DEEP DIVE');
+  const headline = escapeHtml(spec.headline || spec.title || 'Production Engineering');
   const highlight = escapeHtml(spec.highlightWord || '');
   const formattedHeadline = highlight && headline.includes(highlight)
-    ? headline.replace(highlight, `<span style="background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">${highlight}</span>`)
+    ? headline.replace(highlight, `<span style="color:#60a5fa;">${highlight}</span>`)
     : headline;
 
   const subtitle = escapeHtml(spec.subtitle || '');
   const highlights = (spec.highlights || []).slice(0, 3);
-  const cardAccents = ['#38bdf8', '#a78bfa', '#f43f5e'];
+  const cardAccents = ['#60a5fa', '#34d399', '#f59e0b'];
 
   const cardsHtml = highlights
     .map((h, idx) => {
       const accent = cardAccents[idx % cardAccents.length];
       return `
-        <div style="flex:1;background:rgba(15,23,42,0.75);border:1px solid rgba(148,163,184,0.18);border-radius:12px;padding:14px;">
+        <div style="flex:1;background:rgba(15,23,42,0.8);border:1px solid rgba(148,163,184,0.18);border-radius:12px;padding:14px;">
           <div style="width:34px;height:34px;border-radius:9px;background:rgba(56,189,248,0.12);border:1px solid ${accent}44;display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
             ${getIconSvg(h.icon || 'shield', accent)}
           </div>
@@ -181,7 +280,7 @@ function buildInfographicHtml(spec) {
     .map(
       (p) => `
       <div style="display:flex;align-items:center;gap:7px;background:rgba(30,41,59,0.7);border:1px solid rgba(148,163,184,0.16);border-radius:8px;padding:6px 11px;font-size:11.5px;color:#cbd5e1;font-weight:500;">
-        <span style="width:6px;height:6px;border-radius:999px;background:#38bdf8;display:inline-block;"></span>
+        <span style="width:6px;height:6px;border-radius:999px;background:#60a5fa;display:inline-block;"></span>
         ${escapeHtml(p)}
       </div>`
     )
@@ -190,7 +289,7 @@ function buildInfographicHtml(spec) {
   const panelLines = (spec.panelLines || []).slice(0, 5);
   const linesHtml = panelLines
     .map((line) => {
-      const badgeColor = line.status === 'warn' ? '#f59e0b' : line.status === 'ok' ? '#22c55e' : '#38bdf8';
+      const badgeColor = line.status === 'warn' ? '#f59e0b' : line.status === 'ok' ? '#34d399' : '#60a5fa';
       return `
         <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 11px;background:rgba(15,23,42,0.85);border:1px solid rgba(148,163,184,0.14);border-radius:8px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;">
           <span style="color:#cbd5e1;">${escapeHtml(line.key || '')}</span>
@@ -202,14 +301,14 @@ function buildInfographicHtml(spec) {
   return `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
-<body style="margin:0;padding:0;width:1200px;height:630px;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:radial-gradient(circle at 80% 25%,rgba(59,130,246,0.25),transparent 45%),radial-gradient(circle at 20% 80%,rgba(139,92,246,0.18),transparent 45%),linear-gradient(135deg,#070b14 0%,#0f172a 55%,#111827 100%);color:#f8fafc;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;padding:40px 46px 28px;">
+<body style="margin:0;padding:0;width:1200px;height:630px;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,#090d16 0%,#0f172a 100%);color:#f8fafc;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;padding:40px 46px 28px;">
   <div style="display:flex;gap:36px;align-items:center;flex:1;">
     <div style="flex:1.25;display:flex;flex-direction:column;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-        <span style="width:24px;height:2px;background:#818cf8;display:inline-block;"></span>
+        <span style="width:24px;height:2px;background:#60a5fa;display:inline-block;"></span>
         <span style="font-size:12px;font-weight:700;letter-spacing:0.14em;color:#cbd5e1;text-transform:uppercase;">${eyebrow}</span>
       </div>
-      <h1 style="margin:0 0 10px 0;font-size:40px;font-weight:800;line-height:1.12;letter-spacing:-0.025em;color:#ffffff;">
+      <h1 style="margin:0 0 10px 0;font-size:38px;font-weight:800;line-height:1.12;letter-spacing:-0.025em;color:#ffffff;">
         ${formattedHeadline}
       </h1>
       <p style="margin:0 0 22px 0;font-size:16px;line-height:1.45;color:#cbd5e1;font-weight:400;">
@@ -218,30 +317,25 @@ function buildInfographicHtml(spec) {
       <div style="display:flex;gap:12px;margin-bottom:20px;">
         ${cardsHtml}
       </div>
-      <div style="font-size:14.5px;line-height:1.5;color:#94a3b8;margin-bottom:18px;border-left:3px solid #6366f1;padding-left:14px;">
+      <div style="font-size:14.5px;line-height:1.5;color:#94a3b8;margin-bottom:18px;border-left:3px solid #60a5fa;padding-left:14px;">
         ${escapeHtml(spec.takeaway || '')}
-        <strong style="color:#c4b5fd;">${escapeHtml(spec.takeawayHighlight || '')}</strong>
+        <strong style="color:#bfdbfe;">${escapeHtml(spec.takeawayHighlight || '')}</strong>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;">
         ${pillarsHtml}
       </div>
     </div>
 
-    <div style="flex:0.85;background:rgba(15,23,42,0.82);border:1px solid rgba(96,165,250,0.28);border-radius:18px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,0.45);display:flex;flex-direction:column;gap:14px;">
+    <div style="flex:0.85;background:rgba(15,23,42,0.85);border:1px solid rgba(96,165,250,0.28);border-radius:18px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,0.45);display:flex;flex-direction:column;gap:14px;">
       <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(148,163,184,0.16);padding-bottom:12px;">
-        <div style="display:flex;align-items:center;gap:7px;">
-          <span style="width:10px;height:10px;border-radius:999px;background:#ef4444;display:inline-block;"></span>
-          <span style="width:10px;height:10px;border-radius:999px;background:#f59e0b;display:inline-block;"></span>
-          <span style="width:10px;height:10px;border-radius:999px;background:#22c55e;display:inline-block;"></span>
-          <span style="margin-left:8px;font-size:12px;color:#94a3b8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">${escapeHtml(spec.panelTitle || 'runtime-check.sh')}</span>
-        </div>
-        <span style="background:rgba(34,197,94,0.16);border:1px solid rgba(34,197,94,0.4);color:#4ade80;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">
+        <span style="font-size:12px;color:#94a3b8;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">${escapeHtml(spec.panelTitle || 'runtime-check.sh')}</span>
+        <span style="background:rgba(52,211,153,0.16);border:1px solid rgba(52,211,153,0.4);color:#34d399;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">
           ${escapeHtml(spec.panelStatus || 'VERIFIED')}
         </span>
       </div>
       <div style="display:flex;align-items:center;gap:12px;background:rgba(30,41,59,0.75);border:1px solid rgba(148,163,184,0.18);border-radius:12px;padding:12px 14px;">
-        <div style="width:38px;height:38px;border-radius:10px;background:rgba(99,102,241,0.2);border:1px solid rgba(129,140,248,0.45);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-          ${getIconSvg('server', '#a5b4fc')}
+        <div style="width:38px;height:38px;border-radius:10px;background:rgba(96,165,250,0.18);border:1px solid rgba(96,165,250,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          ${getIconSvg('server', '#93c5fd')}
         </div>
         <div>
           <div style="font-size:14px;font-weight:700;color:#f8fafc;">${escapeHtml(spec.panelTopic || 'Production State')}</div>
@@ -291,13 +385,23 @@ export async function launchCoverBrowser() {
   return chromium.launch(launchOpts);
 }
 
-export async function renderCoverImage(slug, coverSpec, options = {}) {
-  ensureDir(IMAGES_DIR);
-  const outputPath = path.join(IMAGES_DIR, `${slug}.webp`);
+function buildHtmlForSpec(coverSpec) {
+  if (coverSpec?.svgMarkup) {
+    const customHtml = buildCustomSvgHtml(coverSpec);
+    if (customHtml) return { html: customHtml, isCustomSvg: true };
+  }
+  if (coverSpec?.style === 'architecture' && Array.isArray(coverSpec?.columns) && coverSpec.columns.length > 0) {
+    return { html: buildArchitectureHtml(coverSpec), isCustomSvg: false };
+  }
+  return { html: buildInfographicHtml(coverSpec || {}), isCustomSvg: false };
+}
 
-  const html = coverSpec?.style === 'architecture'
-    ? buildArchitectureHtml(coverSpec)
-    : buildInfographicHtml(coverSpec || {});
+export async function renderCoverImage(slug, coverSpec, options = {}) {
+  const outDir = options.outputDir || IMAGES_DIR;
+  ensureDir(outDir);
+  const outputPath = path.join(outDir, `${slug}.webp`);
+
+  const { html, isCustomSvg } = buildHtmlForSpec(coverSpec);
 
   const browser = await launchCoverBrowser();
   try {
@@ -306,13 +410,41 @@ export async function renderCoverImage(slug, coverSpec, options = {}) {
       deviceScaleFactor: 1,
     });
     await page.setContent(html, { waitUntil: 'load' });
+
+    if (isCustomSvg) {
+      const check = await page.evaluate(() => {
+        const svg = document.querySelector('main svg');
+        if (!svg) return { ok: false, reason: 'Missing <svg> inside stage' };
+        const rect = svg.getBoundingClientRect();
+        const shapes = svg.querySelectorAll('rect, circle, ellipse, path, line, polyline, polygon, text').length;
+        const overflow = document.documentElement.scrollWidth > 1200 || document.documentElement.scrollHeight > 630;
+        if (rect.width < 200 || rect.height < 100 || shapes < 4) {
+          return { ok: false, reason: `Insufficient SVG content (${shapes} primitives)` };
+        }
+        if (overflow) {
+          return { ok: false, reason: 'Document overflowed 1200x630 bounds' };
+        }
+        return { ok: true, shapes };
+      });
+
+      if (!check.ok) {
+        console.warn(`Custom SVG cover check failed (${check.reason}); falling back to structured layout.`);
+        const fallbackHtml = buildInfographicHtml(coverSpec?.fallbackSpec || {
+          eyebrow: coverSpec?.category || 'ENGINEERING DEEP DIVE',
+          headline: coverSpec?.title || 'Production Engineering',
+          subtitle: coverSpec?.subtitle || '',
+        });
+        await page.setContent(fallbackHtml, { waitUntil: 'load' });
+      }
+    }
+
     const pngBuffer = await page.screenshot({ type: 'png' });
     if (options.tempPngPath) {
       fs.writeFileSync(options.tempPngPath, pngBuffer);
     }
     const webpBuffer = await encodeImageBufferToWebp(page, pngBuffer, 'image/png', 0.86);
     fs.writeFileSync(outputPath, webpBuffer);
-    return `blog/images/${slug}.webp`;
+    return options.outputDir ? outputPath : `blog/images/${slug}.webp`;
   } finally {
     await browser.close();
   }
