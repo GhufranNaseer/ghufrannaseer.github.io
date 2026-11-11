@@ -5,6 +5,7 @@ import https from 'node:https';
 import {
   AUTHOR_NAME,
   ROOT_DIR,
+  SITE_URL,
   estimateReadingTime,
   readPosts,
   slugify,
@@ -283,7 +284,15 @@ WRITING & QUALITY RULES:
    - A "Common Mistakes to Avoid" or "Engineering Lessons" section.
    - A crisp "Conclusion" with a memorable 3-line summary ("Remember: ...").
 5. Aim for 900–1300 words of crisp, readable, non-fluffy technical prose.
-6. Return strictly valid JSON matching this schema:
+6. Also write a natural, human-sounding LinkedIn post ("linkedinPost", 900–1500 characters) summarizing the article for software engineers, formatted cleanly with line breaks:
+   - Line 1: Bold-style hook title (plain text, no markdown asterisks)
+   - Short 2-line opening context
+   - "Key Architecture Highlights:" followed by 3–4 numbered takeaways (1., 2., 3., 4.)
+   - "Engineering Perspective:" with 3–4 short crisp lines
+   - Closing takeaway line
+   - 5–7 relevant hashtags at the bottom (e.g. #SystemDesign #BackendEngineering #DevOps)
+   (Do NOT include any URL placeholder in linkedinPost — our publisher script appends the live article URL cleanly.)
+7. Return strictly valid JSON matching this schema:
 {
   "title": "Clear, specific SEO-friendly article title (max 85 chars)",
   "excerpt": "Compelling 1-2 sentence summary (130-165 chars) for article cards and meta description",
@@ -291,6 +300,7 @@ WRITING & QUALITY RULES:
   "tags": ["Tag1", "Tag2", "Tag3", "Tag4"],
   "seoKeywords": ["keyword 1", "keyword 2", "keyword 3", "keyword 4", "keyword 5"],
   "contentHtml": "<p>...</p><h2>...</h2>...",
+  "linkedinPost": "...",
   "coverSpec": ${coverSchemaGuide}
 }`;
 }
@@ -328,7 +338,10 @@ async function main() {
   }
 
   console.log(`Rendering cover diagram (${generated.coverSpec?.style || preferredStyle}) for ${slug}...`);
-  const coverImage = await renderCoverImage(slug, generated.coverSpec);
+  const linkedinCoverPngPath = path.join(ROOT_DIR, '.linkedin-cover.png');
+  const coverImage = await renderCoverImage(slug, generated.coverSpec, {
+    tempPngPath: linkedinCoverPngPath,
+  });
 
   const nowIso = new Date().toISOString();
   const newPost = {
@@ -356,13 +369,17 @@ async function main() {
   writePosts([newPost, ...existingPosts]);
   buildAllBlogPages();
 
-  // Store metadata for industrial-grade Conventional Commit in GitHub Actions
+  // Store metadata for industrial-grade Conventional Commit & LinkedIn publishing in GitHub Actions
+  const blogUrl = `${SITE_URL}/blog/${newPost.slug}/`;
   const commitMeta = {
     title: newPost.title,
     slug: newPost.slug,
     category: newPost.category,
     readingTime: newPost.readingTime,
     coverImage: newPost.coverImage,
+    blogUrl,
+    linkedinPost: (generated.linkedinPost || `${newPost.title}\n\n${newPost.excerpt}`).trim(),
+    linkedinCoverPngPath: '.linkedin-cover.png',
   };
   fs.writeFileSync(path.join(ROOT_DIR, '.last-commit-meta.json'), JSON.stringify(commitMeta, null, 2), 'utf8');
 

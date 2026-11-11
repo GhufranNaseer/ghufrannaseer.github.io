@@ -291,7 +291,7 @@ export async function launchCoverBrowser() {
   return chromium.launch(launchOpts);
 }
 
-export async function renderCoverImage(slug, coverSpec) {
+export async function renderCoverImage(slug, coverSpec, options = {}) {
   ensureDir(IMAGES_DIR);
   const outputPath = path.join(IMAGES_DIR, `${slug}.webp`);
 
@@ -307,6 +307,9 @@ export async function renderCoverImage(slug, coverSpec) {
     });
     await page.setContent(html, { waitUntil: 'load' });
     const pngBuffer = await page.screenshot({ type: 'png' });
+    if (options.tempPngPath) {
+      fs.writeFileSync(options.tempPngPath, pngBuffer);
+    }
     const webpBuffer = await encodeImageBufferToWebp(page, pngBuffer, 'image/png', 0.86);
     fs.writeFileSync(outputPath, webpBuffer);
     return `blog/images/${slug}.webp`;

@@ -7,7 +7,8 @@
   "scripts": {
     "migrate": "node scripts/migrate-posts.mjs",
     "build": "node scripts/build-blog.mjs",
-    "generate": "node scripts/generate-daily-post.mjs"
+    "generate": "node scripts/generate-daily-post.mjs",
+    "linkedin": "node scripts/post-to-linkedin.mjs"
   },
   "dependencies": {
     "playwright-core": "^1.52.0"
