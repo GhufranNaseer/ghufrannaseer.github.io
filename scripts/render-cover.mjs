@@ -261,14 +261,25 @@ function buildInfographicHtml(spec) {
 </html>`;
 }
 
-export async function renderCoverImage(slug, coverSpec) {
-  ensureDir(IMAGES_DIR);
-  const outputPath = path.join(IMAGES_DIR, `${slug}.png`);
+export async function encodeImageBufferToWebp(page, buffer, mimeType = 'image/png', quality = 0.86) {
+  const dataUrl = `data:${mimeType};base64,${buffer.toString('base64')}`;
+  const webpDataUrl = await page.evaluate(async ({ src, q }) => {
+    const img = new Image();
+    img.src = src;
+    await img.decode();
+    const canvas = document.createElement('canvas');
+    canvas.width = img.naturalWidth || 1200;
+    canvas.height = img.naturalHeight || 630;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/webp', q);
+  }, { src: dataUrl, q: quality });
 
-  const html = coverSpec?.style === 'architecture'
-    ? buildArchitectureHtml(coverSpec)
-    : buildInfographicHtml(coverSpec || {});
+  const base64 = webpDataUrl.split(',')[1];
+  return Buffer.from(base64, 'base64');
+}
 
+export async function launchCoverBrowser() {
   const executablePath = findBrowserExecutable();
   const launchOpts = {
     headless: true,
@@ -277,16 +288,28 @@ export async function renderCoverImage(slug, coverSpec) {
   if (executablePath) {
     launchOpts.executablePath = executablePath;
   }
+  return chromium.launch(launchOpts);
+}
 
-  const browser = await chromium.launch(launchOpts);
+export async function renderCoverImage(slug, coverSpec) {
+  ensureDir(IMAGES_DIR);
+  const outputPath = path.join(IMAGES_DIR, `${slug}.webp`);
+
+  const html = coverSpec?.style === 'architecture'
+    ? buildArchitectureHtml(coverSpec)
+    : buildInfographicHtml(coverSpec || {});
+
+  const browser = await launchCoverBrowser();
   try {
     const page = await browser.newPage({
       viewport: { width: 1200, height: 630 },
       deviceScaleFactor: 1,
     });
     await page.setContent(html, { waitUntil: 'load' });
-    await page.screenshot({ path: outputPath, type: 'png' });
-    return `blog/images/${slug}.png`;
+    const pngBuffer = await page.screenshot({ type: 'png' });
+    const webpBuffer = await encodeImageBufferToWebp(page, pngBuffer, 'image/png', 0.86);
+    fs.writeFileSync(outputPath, webpBuffer);
+    return `blog/images/${slug}.webp`;
   } finally {
     await browser.close();
   }

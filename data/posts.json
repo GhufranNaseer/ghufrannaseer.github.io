@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-11T07:19:05.387Z",
+  "updatedAt": "2026-11-11T16:06:19.347Z",
   "count": 10,
   "posts": [
     {
@@ -25,7 +25,7 @@
           "LLM Evaluation"
         ]
       },
-      "coverImage": "blog/images/engineering-determinism-architecting-production-grade-rag-systems.png",
+      "coverImage": "blog/images/engineering-determinism-architecting-production-grade-rag-systems.webp",
       "readingTime": "5 min read",
       "publishedAt": "2026-11-11T07:19:05.386Z",
       "createdAt": "2026-11-11T07:19:05.386Z",
@@ -55,7 +55,7 @@
           "Core Web Vitals 2026"
         ]
       },
-      "coverImage": "blog/images/beyond-hydration-architecting-for-lcp-and-interaction-to-next-paint-inp.png",
+      "coverImage": "blog/images/beyond-hydration-architecting-for-lcp-and-interaction-to-next-paint-inp.webp",
       "readingTime": "6 min read",
       "publishedAt": "2026-11-11T07:00:53.680Z",
       "createdAt": "2026-11-11T07:00:53.680Z",
@@ -72,7 +72,7 @@
       "tags": [
         "Software Architecture / Backend Development"
       ],
-      "coverImage": "blog/images/the-microservices-revolution-scale-smarter-not-harder.png",
+      "coverImage": "blog/images/the-microservices-revolution-scale-smarter-not-harder.webp",
       "readingTime": "2 min read",
       "publishedAt": "2026-03-12T13:23:20.882Z",
       "createdAt": "2026-03-12T13:23:20.882Z",
@@ -89,7 +89,7 @@
       "tags": [
         "Technology Made Simple / Web Basics"
       ],
-      "coverImage": "blog/images/the-digital-waiter-how-apps-actually-talk-to-each-other.png",
+      "coverImage": "blog/images/the-digital-waiter-how-apps-actually-talk-to-each-other.webp",
       "readingTime": "2 min read",
       "publishedAt": "2026-02-20T14:51:53.573Z",
       "createdAt": "2026-02-20T14:51:53.573Z",
@@ -106,7 +106,7 @@
       "tags": [
         "Technology Made Simple / Daily Tech"
       ],
-      "coverImage": "blog/images/where-is-the-cloud-actually.png",
+      "coverImage": "blog/images/where-is-the-cloud-actually.webp",
       "readingTime": "2 min read",
       "publishedAt": "2026-02-08T14:29:33.998Z",
       "createdAt": "2026-02-08T14:29:33.998Z",
@@ -123,7 +123,7 @@
       "tags": [
         "Technology Made Simple / Digital Trends"
       ],
-      "coverImage": "blog/images/the-secret-behind-the-apps-that-never-break.png",
+      "coverImage": "blog/images/the-secret-behind-the-apps-that-never-break.webp",
       "readingTime": "2 min read",
       "publishedAt": "2026-02-04T14:56:04.251Z",
       "createdAt": "2026-02-04T14:56:04.251Z",
@@ -141,7 +141,7 @@
         "Emerging Tech",
         "Artificial Intelligence (AI)"
       ],
-      "coverImage": "blog/images/do-you-know-the-mindblowing-tech-facts-of-2026.png",
+      "coverImage": "blog/images/do-you-know-the-mindblowing-tech-facts-of-2026.webp",
       "readingTime": "2 min read",
       "publishedAt": "2026-02-01T12:54:54.340Z",
       "createdAt": "2026-02-01T12:54:54.340Z",
@@ -160,7 +160,7 @@
         "Entrepreneurship",
         "Career Development"
       ],
-      "coverImage": "blog/images/building-your-first-website-5-essential-steps-to-success-in-2026.jpg",
+      "coverImage": "blog/images/building-your-first-website-5-essential-steps-to-success-in-2026.webp",
       "readingTime": "2 min read",
       "publishedAt": "2026-01-29T10:16:54.159Z",
       "createdAt": "2026-01-29T10:16:54.159Z",
@@ -177,7 +177,7 @@
       "tags": [
         "Modern Engineering"
       ],
-      "coverImage": "blog/images/understanding-system-design-a-beginners-guide.jpg",
+      "coverImage": "blog/images/understanding-system-design-a-beginners-guide.webp",
       "readingTime": "2 min read",
       "publishedAt": "2026-01-28T10:27:02.178Z",
       "createdAt": "2026-01-28T10:27:02.178Z",
@@ -196,7 +196,7 @@
         "Innovation",
         "Business"
       ],
-      "coverImage": "blog/images/driving-innovation-in-the-digital-world.png",
+      "coverImage": "blog/images/driving-innovation-in-the-digital-world.webp",
       "readingTime": "2 min read",
       "publishedAt": "2026-01-28T10:12:48.086Z",
       "createdAt": "2026-01-28T10:12:48.086Z",
