@@ -1277,8 +1277,8 @@ body {
 
   /* Comfortable image height on mobile */
   .blogs-grid>.project-card .project-image {
-    height: 190px;
-    object-fit: cover;
+    height: 100%;
+    object-fit: contain;
   }
 }
 
@@ -1818,4 +1818,29 @@ body {
   .blog-author-box {
     flex-direction: column;
   }
+}
+
+/* Ensure blog card cover diagrams & infographics fit cleanly without cropping */
+.blogs-grid > .project-card .project-image-container,
+.blog-archive-card .project-image-container {
+  aspect-ratio: 1200 / 630;
+  width: 100%;
+  background-color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.blogs-grid > .project-card .project-image,
+.blog-archive-card .project-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.blogs-grid > .project-card:hover .project-image,
+.blog-archive-card:hover .project-image {
+  transform: scale(1.02);
 }
