@@ -221,6 +221,14 @@ function initMobileMenu() {
       closeMobileMenu();
     }
   });
+
+  // Close menu on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && state.mobileMenuOpen) {
+      closeMobileMenu();
+      mobileMenuBtn.focus();
+    }
+  });
 }
 
 function toggleMobileMenu() {
@@ -231,9 +239,11 @@ function toggleMobileMenu() {
   if (state.mobileMenuOpen) {
     mobileMenu.classList.add('active');
     mobileMenuBtn.classList.add('active');
+    mobileMenuBtn.setAttribute('aria-expanded', 'true');
   } else {
     mobileMenu.classList.remove('active');
     mobileMenuBtn.classList.remove('active');
+    mobileMenuBtn.setAttribute('aria-expanded', 'false');
   }
 }
 
@@ -244,6 +254,7 @@ function closeMobileMenu() {
 
   mobileMenu.classList.remove('active');
   mobileMenuBtn.classList.remove('active');
+  mobileMenuBtn.setAttribute('aria-expanded', 'false');
 }
 
 // Typewriter Effect
@@ -301,6 +312,7 @@ function initScrollAnimations() {
       section.style.opacity = '1';
       section.style.transform = 'none';
     });
+    animateSkillBars();
     return;
   }
 
@@ -420,6 +432,10 @@ function renderSkills() {
 
     skillsGrid.appendChild(skillItem);
   });
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    animateSkillBars();
+  }
 }
 
 function animateSkillBars() {
@@ -533,7 +549,10 @@ function renderTestimonials() {
 }
 
 // Project Modal
+let lastFocusedBeforeModal = null;
+
 function openProjectModal(project) {
+  lastFocusedBeforeModal = document.activeElement;
   state.selectedProject = project;
   state.isModalOpen = true;
 
@@ -576,6 +595,11 @@ function openProjectModal(project) {
   if (typeof lucide !== 'undefined') {
     lucide.createIcons();
   }
+
+  const closeBtn = document.getElementById('modal-close');
+  if (closeBtn) {
+    requestAnimationFrame(() => closeBtn.focus());
+  }
 }
 
 function closeProjectModal() {
@@ -585,6 +609,11 @@ function closeProjectModal() {
   const modal = document.getElementById('project-modal');
   modal.classList.remove('active');
   document.body.style.overflow = '';
+
+  if (lastFocusedBeforeModal && typeof lastFocusedBeforeModal.focus === 'function') {
+    lastFocusedBeforeModal.focus();
+    lastFocusedBeforeModal = null;
+  }
 }
 
 function initProjectModal() {
@@ -719,13 +748,12 @@ function handleOpenContactForm() {
 }
 
 function downloadCV() {
-  const fileId = '1vNVCFRp8ziqx5NS2RZV5qC5nIcSzqX2L';
-  const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+  const downloadUrl = 'https://drive.google.com/file/d/1WB3pzAW-gBEmJHYLA5R-wG2PmJs7jXRH/view';
 
   const link = document.createElement('a');
   link.href = downloadUrl;
-  link.download = 'Muhammad_Ghufran_CV.pdf';
   link.target = '_blank';
+  link.rel = 'noopener noreferrer';
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

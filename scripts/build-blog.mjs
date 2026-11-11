@@ -16,14 +16,14 @@ import {
 } from './lib/utils.mjs';
 
 function resolveAbsoluteImageUrl(coverImage) {
-  if (!coverImage) return `${SITE_URL}/favicon.svg`;
+  if (!coverImage) return `${SITE_URL}/favicon.png`;
   if (/^https?:\/\//i.test(coverImage)) return coverImage;
   const clean = coverImage.replace(/^\/+/, '');
   return `${SITE_URL}/${clean}`;
 }
 
 function resolveRelativeAsset(coverImage, basePath) {
-  if (!coverImage) return `${basePath}favicon.svg`;
+  if (!coverImage) return `${basePath}favicon.png`;
   if (/^https?:\/\//i.test(coverImage)) return coverImage;
   return `${basePath}${coverImage.replace(/^\/+/, '')}`;
 }
@@ -275,8 +275,10 @@ function renderPostPage(post, prevPost, nextPost) {
     <meta name="author" content="${escapeHtml(author)}">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <link rel="canonical" href="${canonicalUrl}">
-    <link rel="icon" type="image/svg+xml" href="${basePath}favicon.svg">
-    <link rel="shortcut icon" href="${basePath}favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="${basePath}favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="${basePath}favicon.png">
+    <link rel="shortcut icon" type="image/png" href="${basePath}favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="${basePath}apple-touch-icon.png">
 
     <!-- Open Graph / LinkedIn / Meta -->
     <meta property="og:type" content="article">
@@ -406,7 +408,7 @@ function renderArchivePage(posts) {
   const basePath = '../';
   const canonicalUrl = `${SITE_URL}/blog/`;
   const categories = [...new Set(posts.map((p) => p.category || 'Engineering'))];
-  const latestImage = posts[0] ? resolveAbsoluteImageUrl(posts[0].coverImage) : `${SITE_URL}/favicon.svg`;
+  const latestImage = posts[0] ? resolveAbsoluteImageUrl(posts[0].coverImage) : `${SITE_URL}/favicon.png`;
 
   const filterButtons = [
     `<button type="button" class="blog-filter-btn active" data-category="all">All (${posts.length})</button>`,
@@ -469,7 +471,10 @@ function renderArchivePage(posts) {
     <meta name="description" content="Industrial engineering articles on Backend Architecture, DevOps, Kubernetes, Cybersecurity, React, Node.js, and AI Integration by Muhammad Ghufran Naseer.">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="${canonicalUrl}">
-    <link rel="icon" type="image/svg+xml" href="${basePath}favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="${basePath}favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="${basePath}favicon.png">
+    <link rel="shortcut icon" type="image/png" href="${basePath}favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="${basePath}apple-touch-icon.png">
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="${AUTHOR_NAME}">

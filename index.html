@@ -3,12 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="color-scheme" content="light dark">
     <meta name="google-site-verification" content="WzhcMOcx1VJPDXjdnyq9ilsU4V7_TQVgF6Gc6V81xGk" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Muhammad Ghufran Naseer | Muhammad Ghufran | Full Stack Developer Portfolio | React, Node.js & AI Solutions
     </title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="shortcut icon" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <meta name="description"
         content="Official portfolio of Muhammad Ghufran Naseer (Muhammad Ghufran), a Full Stack Developer specializing in modern web applications, EMS/CRM systems, and AI-powered solutions with 50+ completed projects.">
     <meta name="keywords"
@@ -23,7 +26,9 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
         rel="stylesheet">
 
     <!-- Cloudflare Web Analytics -->
@@ -51,21 +56,25 @@
     }
     </script>
 
-    <!-- CSS -->
-    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <!-- CSS & Main Script -->
     <script src="script.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="light-theme">
+    <a href="#main-content" class="skip-link visually-hidden">Skip to main content</a>
+
     <!-- Header -->
     <header class="header">
         <div class="header-container">
             <div class="header-content">
                 <div class="logo" data-testid="header-logo">
-                    Muhammad Ghufran
+                    <a href="#hero" class="logo-link">
+                        <span class="logo-mark" aria-hidden="true">MG</span>
+                        <span class="logo-text">Muhammad Ghufran</span>
+                    </a>
                 </div>
-                <nav class="nav-desktop">
+                <nav class="nav-desktop" aria-label="Primary">
                     <a href="#services" data-testid="nav-services">Professional Services</a>
                     <a href="#about" data-testid="nav-about">About Muhammad</a>
                     <a href="#projects" data-testid="nav-projects">Featured Projects</a>
@@ -74,15 +83,15 @@
                     <a href="#contact" data-testid="nav-contact">Get In Touch</a>
                 </nav>
                 <div class="header-actions">
-                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
                         <i data-lucide="sun" class="sun-icon"></i>
                         <i data-lucide="moon" class="moon-icon"></i>
                     </button>
-                    <button class="btn-primary header-cta" id="get-quote-btn" data-testid="button-get-quote">
+                    <button type="button" class="btn-primary header-cta" id="get-quote-btn" data-testid="button-get-quote">
                         Get Quote
                     </button>
-                    <button class="mobile-menu-btn" id="mobile-menu-btn" data-testid="button-mobile-menu"
-                        aria-label="Toggle navigation menu">
+                    <button type="button" class="mobile-menu-btn" id="mobile-menu-btn" data-testid="button-mobile-menu"
+                        aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-menu">
                         <i data-lucide="menu" class="menu-icon"></i>
                         <i data-lucide="x" class="close-icon"></i>
                     </button>
@@ -90,7 +99,7 @@
             </div>
             <!-- Mobile Menu -->
             <div class="mobile-menu" id="mobile-menu">
-                <nav class="mobile-nav">
+                <nav class="mobile-nav" aria-label="Mobile">
                     <a href="#services" data-testid="mobile-nav-services">Services</a>
                     <a href="#about" data-testid="mobile-nav-about">About</a>
                     <a href="#projects" data-testid="mobile-nav-projects">Projects</a>
@@ -98,12 +107,13 @@
                     <a href="#testimonials" data-testid="mobile-nav-testimonials">Testimonials</a>
                     <a href="#contact" data-testid="mobile-nav-contact">Contact</a>
                     <div class="mobile-theme-toggle">
-                        <button class="theme-toggle" id="mobile-theme-toggle" aria-label="Toggle theme">
+                        <span class="mobile-theme-label">Theme</span>
+                        <button type="button" class="theme-toggle" id="mobile-theme-toggle" aria-label="Toggle theme">
                             <i data-lucide="sun" class="sun-icon"></i>
                             <i data-lucide="moon" class="moon-icon"></i>
                         </button>
                     </div>
-                    <button class="btn-primary mobile-cta" id="mobile-get-quote-btn"
+                    <button type="button" class="btn-primary mobile-cta" id="mobile-get-quote-btn"
                         data-testid="mobile-button-get-quote">
                         Get Quote
                     </button>
@@ -112,271 +122,298 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section animate-section" id="hero">
-        <div class="container">
-            <div class="hero-grid">
-                <div class="hero-content">
-                    <h1 class="hero-title" data-testid="hero-title">
-                        Muhammad Ghufran Naseer
-                    </h1>
-                    <h2 class="hero-subtitle-top"
-                        style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1rem; color: var(--primary);">
-                        Full Stack Developer | React.js | Node.js | AI Solutions
-                    </h2>
-                    <div class="typewriter-container">
-                        <span class="text-primary typewriter-text" data-testid="typewriter-text"
-                            id="typewriter-text"></span>
-                        <span class="cursor">|</span>
+    <main id="main-content" tabindex="-1">
+        <!-- Hero Section -->
+        <section class="hero-section animate-section" id="hero">
+            <div class="hero-backdrop" aria-hidden="true"></div>
+            <div class="container">
+                <div class="hero-grid">
+                    <div class="hero-content">
+                        <div class="hero-eyebrow">
+                            <span class="status-dot" aria-hidden="true"></span>
+                            <span>Available for New Projects &middot; UK &amp; Remote</span>
+                        </div>
+                        <h1 class="hero-title" data-testid="hero-title">
+                            Muhammad Ghufran Naseer
+                        </h1>
+                        <h2 class="hero-subtitle-top">
+                            Full Stack Developer &mdash; React.js, Node.js &amp; AI Solutions
+                        </h2>
+                        <div class="typewriter-container">
+                            <span class="typewriter-label">Specialty:</span>
+                            <span class="text-primary typewriter-text" data-testid="typewriter-text"
+                                id="typewriter-text"></span>
+                            <span class="cursor" aria-hidden="true">|</span>
+                        </div>
+                        <p class="hero-description" data-testid="hero-description">
+                            Muhammad Ghufran Naseer is a Full Stack Developer specializing in modern web applications,
+                            EMS/CRM systems, and AI-powered solutions. BSCS Graduate from Iqra University with ACCP Pro
+                            diploma.
+                        </p>
+                        <p class="hero-subtitle" data-testid="hero-subtitle">
+                            Experienced in React.js, Node.js, PostgreSQL, WordPress with Elementor Pro, and AI integrations.
+                            Strong focus on client communication, quality delivery, and ongoing support.
+                        </p>
+                        <div class="hero-actions">
+                            <button type="button" class="btn-primary" id="start-project-btn" data-testid="button-start-project">
+                                <i data-lucide="mail"></i>
+                                Start Project
+                            </button>
+                            <button type="button" class="btn-outline" id="download-cv-btn" data-testid="button-download-cv">
+                                <i data-lucide="download"></i>
+                                Download CV
+                            </button>
+                        </div>
                     </div>
-                    <p class="hero-description" data-testid="hero-description">
-                        Muhammad Ghufran Naseer is a Full Stack Developer specializing in modern web applications,
-                        EMS/CRM systems, and AI-powered solutions. BSCS Graduate from Iqra University with ACCP Pro
-                        diploma.
+                    <!-- Stats Box -->
+                    <div class="stats-card">
+                        <div class="stats-panel-header">
+                            <span class="stats-panel-kicker">Track Record</span>
+                            <span class="stats-panel-badge">Client Verified</span>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-item" data-testid="stat-0">
+                                <div class="stat-icon">
+                                    <i data-lucide="award"></i>
+                                </div>
+                                <div class="stat-value" data-testid="stat-value-0">50+</div>
+                                <div class="stat-label" data-testid="stat-label-0">Projects Completed</div>
+                            </div>
+                            <div class="stat-item" data-testid="stat-1">
+                                <div class="stat-icon">
+                                    <i data-lucide="users"></i>
+                                </div>
+                                <div class="stat-value" data-testid="stat-value-1">40+</div>
+                                <div class="stat-label" data-testid="stat-label-1">Happy Clients</div>
+                            </div>
+                            <div class="stat-item" data-testid="stat-2">
+                                <div class="stat-icon">
+                                    <i data-lucide="trending-up"></i>
+                                </div>
+                                <div class="stat-value" data-testid="stat-value-2">99%</div>
+                                <div class="stat-label" data-testid="stat-label-2">Success Rate</div>
+                            </div>
+                            <div class="stat-item" data-testid="stat-3">
+                                <div class="stat-icon">
+                                    <i data-lucide="star"></i>
+                                </div>
+                                <div class="stat-value" data-testid="stat-value-3">3+</div>
+                                <div class="stat-label" data-testid="stat-label-3">Years Experience</div>
+                            </div>
+                        </div>
+                        <div class="stats-panel-footer">
+                            <span class="stack-pill">React.js</span>
+                            <span class="stack-pill">Node.js</span>
+                            <span class="stack-pill">PostgreSQL</span>
+                            <span class="stack-pill">WordPress</span>
+                            <span class="stack-pill">AI / LLM</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services-section animate-section" id="services">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Services</span>
+                    <h2 class="section-title" data-testid="services-title">Professional Services</h2>
+                    <p class="section-description" data-testid="services-description">
+                        Comprehensive development solutions tailored to your business needs with transparent pricing and
+                        clear timelines.
                     </p>
-                    <p class="hero-subtitle" data-testid="hero-subtitle">
-                        Experienced in React.js, Node.js, PostgreSQL, WordPress with Elementor Pro, and AI integrations.
-                        Strong focus on client communication, quality delivery, and ongoing support.
+                </div>
+
+                <div class="services-grid" id="services-grid">
+                    <!-- Service cards will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills/About Section -->
+        <section class="skills-section animate-section" id="about">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Expertise</span>
+                    <h2 class="section-title" data-testid="skills-title">Technical Expertise</h2>
+                    <p class="section-description" data-testid="skills-description">
+                        Proficient in modern technologies with hands-on experience in building scalable applications.
                     </p>
-                    <div class="hero-actions">
-                        <button class="btn-primary" id="start-project-btn" data-testid="button-start-project">
-                            <i data-lucide="mail"></i>
-                            Start Project
-                        </button>
-                        <button class="btn-outline" id="download-cv-btn" data-testid="button-download-cv">
-                            <i data-lucide="download"></i>
-                            Download CV
-                        </button>
-                    </div>
                 </div>
-                <!-- Stats Box -->
-                <div class="stats-card">
-                    <div class="stats-grid">
-                        <div class="stat-item" data-testid="stat-0">
-                            <div class="stat-icon">
-                                <i data-lucide="award"></i>
-                            </div>
-                            <div class="stat-value" data-testid="stat-value-0">50+</div>
-                            <div class="stat-label" data-testid="stat-label-0">Projects Completed</div>
-                        </div>
-                        <div class="stat-item" data-testid="stat-1">
-                            <div class="stat-icon">
-                                <i data-lucide="users"></i>
-                            </div>
-                            <div class="stat-value" data-testid="stat-value-1">40+</div>
-                            <div class="stat-label" data-testid="stat-label-1">Happy Clients</div>
-                        </div>
-                        <div class="stat-item" data-testid="stat-2">
-                            <div class="stat-icon">
-                                <i data-lucide="trending-up"></i>
-                            </div>
-                            <div class="stat-value" data-testid="stat-value-2">99%</div>
-                            <div class="stat-label" data-testid="stat-label-2">Success Rate</div>
-                        </div>
-                        <div class="stat-item" data-testid="stat-3">
-                            <div class="stat-icon">
-                                <i data-lucide="star"></i>
-                            </div>
-                            <div class="stat-value" data-testid="stat-value-3">3+</div>
-                            <div class="stat-label" data-testid="stat-label-3">Years Experience</div>
-                        </div>
-                    </div>
+
+                <div class="skills-grid" data-testid="skills-grid" id="skills-grid">
+                    <!-- Skills will be populated by JavaScript -->
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Services Section -->
-    <section class="services-section animate-section" id="services">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" data-testid="services-title">Professional Services</h2>
-                <p class="section-description" data-testid="services-description">
-                    Comprehensive development solutions tailored to your business needs with transparent pricing and
-                    clear timelines.
-                </p>
-            </div>
+        <!-- Projects Section -->
+        <section class="projects-section animate-section" id="projects">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Portfolio</span>
+                    <h2 class="section-title" data-testid="projects-title">Featured Projects</h2>
+                    <p class="section-description" data-testid="projects-description">
+                        A showcase of recent projects demonstrating technical expertise and client satisfaction.
+                    </p>
+                </div>
 
-            <div class="services-grid" id="services-grid">
-                <!-- Service cards will be populated by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills/About Section -->
-    <section class="skills-section animate-section" id="about">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" data-testid="skills-title">Technical Expertise</h2>
-                <p class="section-description" data-testid="skills-description">
-                    Proficient in modern technologies with hands-on experience in building scalable applications.
-                </p>
-            </div>
-
-            <div class="skills-grid" data-testid="skills-grid" id="skills-grid">
-                <!-- Skills will be populated by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section class="projects-section animate-section" id="projects">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" data-testid="projects-title">Featured Projects</h2>
-                <p class="section-description" data-testid="projects-description">
-                    A showcase of recent projects demonstrating technical expertise and client satisfaction.
-                </p>
-            </div>
-
-            <div class="projects-grid" id="projects-grid">
-                <!-- Project cards will be populated by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Blog Section -->
-    <section class="blogs-section animate-section" id="blogs">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" data-testid="blogs-title">Latest Articles</h2>
-                <p class="section-description" data-testid="blogs-description">
-                    Stay up to date with my latest thoughts on technology, software development, and more.
-                </p>
-                <div style="margin-top: 1.25rem;">
-                    <a href="blog/" class="btn-outline" style="text-decoration: none;">
-                        View All Articles <i data-lucide="arrow-right"></i>
-                    </a>
+                <div class="projects-grid" id="projects-grid">
+                    <!-- Project cards will be populated by JavaScript -->
                 </div>
             </div>
-            <div class="carousel-container" data-testid="blogs-carousel-container">
-                <button class="carousel-btn prev-btn" id="blogs-prev-btn" aria-label="Previous posts">
-                    <i data-lucide="chevron-left"></i>
-                </button>
-                <div class="carousel-viewport">
-                    <div class="blogs-grid" data-testid="blogs-grid" id="blogs-grid">
-                        <!-- Blog cards will be populated by JavaScript -->
+        </section>
+
+        <!-- Blog Section -->
+        <section class="blogs-section animate-section" id="blogs">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Insights</span>
+                    <h2 class="section-title" data-testid="blogs-title">Latest Articles</h2>
+                    <p class="section-description" data-testid="blogs-description">
+                        Stay up to date with my latest thoughts on technology, software development, and more.
+                    </p>
+                    <div class="section-cta-wrap">
+                        <a href="blog/" class="btn-outline">
+                            View All Articles <i data-lucide="arrow-right"></i>
+                        </a>
                     </div>
                 </div>
-                <button class="carousel-btn next-btn" id="blogs-next-btn" aria-label="Next posts">
-                    <i data-lucide="chevron-right"></i>
-                </button>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Testimonials Section -->
-    <section class="testimonials-section animate-section" id="testimonials">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" data-testid="testimonials-title">Client Testimonials</h2>
-                <p class="section-description" data-testid="testimonials-description">
-                    Hear from satisfied clients who have experienced exceptional service and results.
-                </p>
-            </div>
-
-            <div class="testimonials-grid" data-testid="testimonials-grid" id="testimonials-grid">
-                <!-- Testimonials will be populated by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact-section animate-section" id="contact">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title" data-testid="contact-title">Let's Work Together</h2>
-                <p class="section-description" data-testid="contact-description">
-                    Ready to start your next project? Get in touch and let's discuss how I can help bring your ideas to
-                    life.
-                </p>
-            </div>
-
-            <div class="contact-grid" data-testid="contact-grid">
-                <div class="contact-info">
-                    <div class="contact-item" data-testid="contact-email">
-                        <div class="contact-icon">
-                            <i data-lucide="mail"></i>
-                        </div>
-                        <div class="contact-details">
-                            <div class="contact-label">Email</div>
-                            <div class="contact-value">me.ghufrannaseer@gmail.com</div>
+                <div class="carousel-container" data-testid="blogs-carousel-container">
+                    <button type="button" class="carousel-btn prev-btn" id="blogs-prev-btn" aria-label="Previous posts">
+                        <i data-lucide="chevron-left"></i>
+                    </button>
+                    <div class="carousel-viewport">
+                        <div class="blogs-grid" data-testid="blogs-grid" id="blogs-grid">
+                            <!-- Blog cards will be populated by JavaScript -->
                         </div>
                     </div>
-                    <div class="contact-item" data-testid="contact-uk-address">
-                        <div class="contact-icon">
-                            <i data-lucide="map-pin"></i>
-                        </div>
-                        <div class="contact-details">
-                            <div class="contact-label">UK Correspondence Address</div>
-                            <div class="contact-value">6 Valeview Terrace, Glasgow, United Kingdom, G42 9LA</div>
-                        </div>
-                    </div>
-                    <div class="contact-item" data-testid="contact-availability">
-                        <div class="contact-icon">
-                            <i data-lucide="clock"></i>
-                        </div>
-                        <div class="contact-details">
-                            <div class="contact-label">Availability</div>
-                            <div class="contact-value">Available for new projects</div>
-                        </div>
-                    </div>
-                    <div class="contact-item" data-testid="contact-response">
-                        <div class="contact-icon">
-                            <i data-lucide="phone"></i>
-                        </div>
-                        <div class="contact-details">
-                            <div class="contact-label">Response Time</div>
-                            <div class="contact-value">Within 24 hours</div>
-                        </div>
-                    </div>
-                    <div class="contact-item" data-testid="contact-whatsapp">
-                        <div class="contact-icon">
-                            <i data-lucide="message-circle"></i>
-                        </div>
-                        <div class="contact-details">
-                            <div class="contact-label">WhatsApp</div>
-                            <a class="contact-value" href="https://wa.me/447348948065" target="_blank" rel="noopener noreferrer">+44 7348 948065</a>
-                        </div>
-                    </div>
-                    <button class="btn-primary contact-btn" id="send-message-btn" data-testid="button-send-message">
-                        <i data-lucide="mail"></i>
-                        Send Message
+                    <button type="button" class="carousel-btn next-btn" id="blogs-next-btn" aria-label="Next posts">
+                        <i data-lucide="chevron-right"></i>
                     </button>
                 </div>
+            </div>
+        </section>
 
-                <!-- Contact Form -->
-                <div class="contact-form-container">
-                    <form class="contact-form" id="contact-form">
-                        <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn-primary" id="submit-btn">
-                            <span class="btn-text">Send Message</span>
-                            <div class="loading-spinner" style="display: none;">
-                                <div class="spinner"></div>
-                            </div>
-                        </button>
-                        <div class="form-status" id="form-status"></div>
-                    </form>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section animate-section" id="testimonials">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Testimonials</span>
+                    <h2 class="section-title" data-testid="testimonials-title">Client Testimonials</h2>
+                    <p class="section-description" data-testid="testimonials-description">
+                        Hear from satisfied clients who have experienced exceptional service and results.
+                    </p>
+                </div>
+
+                <div class="testimonials-grid" data-testid="testimonials-grid" id="testimonials-grid">
+                    <!-- Testimonials will be populated by JavaScript -->
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section animate-section" id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-eyebrow">Contact</span>
+                    <h2 class="section-title" data-testid="contact-title">Let's Work Together</h2>
+                    <p class="section-description" data-testid="contact-description">
+                        Ready to start your next project? Get in touch and let's discuss how I can help bring your ideas to
+                        life.
+                    </p>
+                </div>
+
+                <div class="contact-grid" data-testid="contact-grid">
+                    <div class="contact-info">
+                        <div class="contact-item" data-testid="contact-email">
+                            <div class="contact-icon">
+                                <i data-lucide="mail"></i>
+                            </div>
+                            <div class="contact-details">
+                                <div class="contact-label">Email</div>
+                                <a class="contact-value" href="mailto:me.ghufrannaseer@gmail.com">me.ghufrannaseer@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-item" data-testid="contact-uk-address">
+                            <div class="contact-icon">
+                                <i data-lucide="map-pin"></i>
+                            </div>
+                            <div class="contact-details">
+                                <div class="contact-label">UK Correspondence Address</div>
+                                <div class="contact-value">6 Valeview Terrace, Glasgow, United Kingdom, G42 9LA</div>
+                            </div>
+                        </div>
+                        <div class="contact-item" data-testid="contact-availability">
+                            <div class="contact-icon">
+                                <i data-lucide="clock"></i>
+                            </div>
+                            <div class="contact-details">
+                                <div class="contact-label">Availability</div>
+                                <div class="contact-value contact-value-live">
+                                    <span class="status-dot" aria-hidden="true"></span>
+                                    Available for new projects
+                                </div>
+                            </div>
+                        </div>
+                        <div class="contact-item" data-testid="contact-response">
+                            <div class="contact-icon">
+                                <i data-lucide="phone"></i>
+                            </div>
+                            <div class="contact-details">
+                                <div class="contact-label">Response Time</div>
+                                <div class="contact-value">Within 24 hours</div>
+                            </div>
+                        </div>
+                        <div class="contact-item" data-testid="contact-whatsapp">
+                            <div class="contact-icon">
+                                <i data-lucide="message-circle"></i>
+                            </div>
+                            <div class="contact-details">
+                                <div class="contact-label">WhatsApp</div>
+                                <a class="contact-value" href="https://wa.me/447348948065" target="_blank" rel="noopener noreferrer">+44 7348 948065</a>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-primary contact-btn" id="send-message-btn" data-testid="button-send-message">
+                            <i data-lucide="mail"></i>
+                            Send Message
+                        </button>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="contact-form-container">
+                        <form class="contact-form" id="contact-form">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" autocomplete="name" placeholder="Your full name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" autocomplete="email" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="you@company.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" name="subject" placeholder="CRM system, web app, AI integration..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" placeholder="Tell me about your goals, timeline, and scope..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary" id="submit-btn">
+                                <span class="btn-text">Send Message</span>
+                                <div class="loading-spinner" style="display: none;">
+                                    <div class="spinner"></div>
+                                </div>
+                            </button>
+                            <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
@@ -406,12 +443,19 @@
                             <i data-lucide="mail"></i>
                             Email
                         </a>
-                        <a href="https://www.linkedin.com/in/ghufran-naseer/" data-testid="footer-linkedin">
-                            <i data-lucide="linkedin"></i>
+                        <a href="https://www.linkedin.com/in/ghufran-naseer/" target="_blank" rel="noopener noreferrer" data-testid="footer-linkedin">
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                <rect width="4" height="12" x="2" y="9"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
                             LinkedIn
                         </a>
-                        <a href="https://github.com/GhufranNaseer" data-testid="footer-github">
-                            <i data-lucide="github"></i>
+                        <a href="https://github.com/GhufranNaseer" target="_blank" rel="noopener noreferrer" data-testid="footer-github">
+                            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+                                <path d="M9 18c-4.51 2-5-2-7-2"/>
+                            </svg>
                             GitHub
                         </a>
                     </div>
@@ -424,14 +468,14 @@
     </footer>
 
     <!-- Project Modal -->
-    <div class="modal-overlay" id="project-modal">
+    <div class="modal-overlay" id="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-project-title">
         <div class="modal-content" data-testid="project-modal">
             <div class="modal-header">
                 <div class="modal-project-info">
                     <div class="modal-project-category" data-testid="modal-project-category"></div>
-                    <h3 class="modal-project-title" data-testid="modal-project-title"></h3>
+                    <h3 class="modal-project-title" id="modal-project-title" data-testid="modal-project-title"></h3>
                 </div>
-                <button class="modal-close" id="modal-close" aria-label="Close modal">
+                <button type="button" class="modal-close" id="modal-close" aria-label="Close modal">
                     <i data-lucide="x"></i>
                 </button>
             </div>
