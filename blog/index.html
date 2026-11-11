@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Articles &amp; Engineering Blog | Muhammad Ghufran Naseer</title>
+    <meta name="description" content="Industrial engineering articles on Backend Architecture, DevOps, Kubernetes, Cybersecurity, React, Node.js, and AI Integration by Muhammad Ghufran Naseer.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://ghufrannaseer.github.io/blog/">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Muhammad Ghufran Naseer">
+    <meta property="og:title" content="Technical Articles &amp; Engineering Blog | Muhammad Ghufran Naseer">
+    <meta property="og:description" content="Engineering deep dives on Backend Architecture, DevOps, Kubernetes, Cybersecurity, Full Stack, and AI Integration.">
+    <meta property="og:url" content="https://ghufrannaseer.github.io/blog/">
+    <meta property="og:image" content="https://ghufrannaseer.github.io/blog/images/beyond-hydration-architecting-for-lcp-and-interaction-to-next-paint-inp.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Technical Articles &amp; Engineering Blog | Muhammad Ghufran Naseer">
+    <meta name="twitter:image" content="https://ghufrannaseer.github.io/blog/images/beyond-hydration-architecting-for-lcp-and-interaction-to-next-paint-inp.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="../styles.css">
+
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Technical Articles | Muhammad Ghufran Naseer",
+    "description": "Engineering deep dives on Backend Architecture, DevOps, Kubernetes, Cybersecurity, Full Stack Development, and AI Integration.",
+    "url": "https://ghufrannaseer.github.io/blog/",
+    "author": {
+        "@type": "Person",
+        "name": "Muhammad Ghufran Naseer",
+        "url": "https://ghufrannaseer.github.io"
+    }
+}
+    </script>
+</head>
+<body class="light-theme">
+    <header class="header">
+        <div class="header-container">
+            <div class="header-content">
+                <div class="logo" data-testid="header-logo">
+                    <a href="../index.html" style="text-decoration:none; color:inherit;">Muhammad Ghufran</a>
+                </div>
+                <nav class="nav-desktop">
+                    <a href="../index.html#services">Professional Services</a>
+                    <a href="../index.html#about">About Muhammad</a>
+                    <a href="../index.html#projects">Featured Projects</a>
+                    <a href="../blog/">Articles</a>
+                    <a href="../index.html#testimonials">Client Reviews</a>
+                    <a href="../index.html#contact">Get In Touch</a>
+                </nav>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+                        <i data-lucide="sun" class="sun-icon"></i>
+                        <i data-lucide="moon" class="moon-icon"></i>
+                    </button>
+                    <a href="../index.html#contact" class="btn-primary header-cta" style="text-decoration:none;">
+                        Get Quote
+                    </a>
+                    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle navigation menu">
+                        <i data-lucide="menu" class="menu-icon"></i>
+                        <i data-lucide="x" class="close-icon"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-menu" id="mobile-menu">
+                <nav class="mobile-nav">
+                    <a href="../index.html#services">Services</a>
+                    <a href="../index.html#about">About</a>
+                    <a href="../index.html#projects">Projects</a>
+                    <a href="../blog/">Articles</a>
+                    <a href="../index.html#testimonials">Testimonials</a>
+                    <a href="../index.html#contact">Contact</a>
+                    <div class="mobile-theme-toggle">
+                        <button class="theme-toggle" id="mobile-theme-toggle" aria-label="Toggle theme">
+                            <i data-lucide="sun" class="sun-icon"></i>
+                            <i data-lucide="moon" class="moon-icon"></i>
+                        </button>
+                    </div>
+                    <a href="../index.html#contact" class="btn-primary mobile-cta" style="text-decoration:none;">
+                        Get Quote
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="blog-archive-main">
+        <div class="container">
+            <div class="section-header" style="margin-bottom:2rem;">
+                <h1 class="section-title" style="font-size:2.5rem;">Engineering Articles</h1>
+                <p class="section-description">
+                    Deep dives on Backend Architecture, DevOps &amp; Kubernetes, Cybersecurity, Full Stack Development, and AI Integration.
+                </p>
+            </div>
+
+            <div class="blog-archive-controls">
+                <div class="blog-filter-group" id="blog-filter-group">
+                    <button type="button" class="blog-filter-btn active" data-category="all">All (9)</button>
+<button type="button" class="blog-filter-btn" data-category="Full Stack &amp; Web Performance">Full Stack &amp; Web Performance</button>
+<button type="button" class="blog-filter-btn" data-category="Software Architecture / Backend Development">Software Architecture / Backend Development</button>
+<button type="button" class="blog-filter-btn" data-category="Technology Made Simple / Web Basics">Technology Made Simple / Web Basics</button>
+<button type="button" class="blog-filter-btn" data-category="Technology Made Simple / Daily Tech">Technology Made Simple / Daily Tech</button>
+<button type="button" class="blog-filter-btn" data-category="Technology Made Simple / Digital Trends">Technology Made Simple / Digital Trends</button>
+<button type="button" class="blog-filter-btn" data-category="Emerging Tech, Artificial Intelligence (AI)">Emerging Tech, Artificial Intelligence (AI)</button>
+<button type="button" class="blog-filter-btn" data-category="Business, Entrepreneurship, Career Development">Business, Entrepreneurship, Career Development</button>
+<button type="button" class="blog-filter-btn" data-category="Modern Engineering">Modern Engineering</button>
+<button type="button" class="blog-filter-btn" data-category="Technology, Innovation, Business">Technology, Innovation, Business</button>
+                </div>
+                <div class="blog-search-wrap">
+                    <i data-lucide="search" class="blog-search-icon"></i>
+                    <input type="search" id="blog-search-input" class="blog-search-input" placeholder="Search articles...">
+                </div>
+            </div>
+
+            <div class="projects-grid" id="blog-archive-grid">
+                
+                <article class="card project-card blog-archive-card" data-category="Full Stack &amp; Web Performance" data-title="beyond hydration: architecting for lcp and interaction to next paint (inp) master the transition from simple page loads to high-performance interactivity. learn to optimize lcp, minimize inp, and leverage modern cdn strategies for scale.">
+                    <a href="./beyond-hydration-architecting-for-lcp-and-interaction-to-next-paint-inp/" class="project-image-container" style="display:block;">
+                        <img class="project-image" src="../blog/images/beyond-hydration-architecting-for-lcp-and-interaction-to-next-paint-inp.png" alt="Beyond Hydration: Architecting for LCP and Interaction to Next Paint (INP)" loading="lazy">
+                    </a>
+                    <div class="project-content">
+                        <div class="project-category">Full Stack &amp; Web Performance</div>
+                        <h2 class="project-title" style="font-size:1.15rem;">
+                            <a href="./beyond-hydration-architecting-for-lcp-and-interaction-to-next-paint-inp/" style="color:inherit;text-decoration:none;">Beyond Hydration: Architecting for LCP and Interaction to Next Paint (INP)</a>
+                        </h2>
+                        <p class="project-description">Master the transition from simple page loads to high-performance interactivity. Learn to optimize LCP, minimize INP, and leverage modern CDN strategies for scale.</p>
+                        <div class="project-tech" style="margin-top:auto;">
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Nov 11, 2026
+                            </span>
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="clock" style="width:13px;height:13px;"></i> 6 min read
+                            </span>
+                        </div>
+                        <a href="./beyond-hydration-architecting-for-lcp-and-interaction-to-next-paint-inp/" class="project-view-button" style="text-decoration:none;margin-top:0.75rem;">
+                            Read Article <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card project-card blog-archive-card" data-category="Software Architecture / Backend Development" data-title="the microservices revolution: scale smarter, not harder what are microservices? microservices architecture is an approach to building applications as a suite of small, independent services. each service foc...">
+                    <a href="./the-microservices-revolution-scale-smarter-not-harder/" class="project-image-container" style="display:block;">
+                        <img class="project-image" src="../blog/images/the-microservices-revolution-scale-smarter-not-harder.png" alt="The Microservices Revolution: Scale Smarter, Not Harder" loading="lazy">
+                    </a>
+                    <div class="project-content">
+                        <div class="project-category">Software Architecture / Backend Development</div>
+                        <h2 class="project-title" style="font-size:1.15rem;">
+                            <a href="./the-microservices-revolution-scale-smarter-not-harder/" style="color:inherit;text-decoration:none;">The Microservices Revolution: Scale Smarter, Not Harder</a>
+                        </h2>
+                        <p class="project-description">What are Microservices? Microservices architecture is an approach to building applications as a suite of small, independent services. Each service foc...</p>
+                        <div class="project-tech" style="margin-top:auto;">
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Mar 12, 2026
+                            </span>
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="clock" style="width:13px;height:13px;"></i> 2 min read
+                            </span>
+                        </div>
+                        <a href="./the-microservices-revolution-scale-smarter-not-harder/" class="project-view-button" style="text-decoration:none;margin-top:0.75rem;">
+                            Read Article <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card project-card blog-archive-card" data-category="Technology Made Simple / Web Basics" data-title="the &quot;digital waiter&quot;: how apps actually talk to each other have you ever wondered how your phone &quot;knows&quot; what the weather is, or how the uber app knows exactly where your driver is? the secret is something cal...">
+                    <a href="./the-digital-waiter-how-apps-actually-talk-to-each-other/" class="project-image-container" style="display:block;">
+                        <img class="project-image" src="../blog/images/the-digital-waiter-how-apps-actually-talk-to-each-other.png" alt="The &quot;Digital Waiter&quot;: How Apps Actually Talk to Each Other" loading="lazy">
+                    </a>
+                    <div class="project-content">
+                        <div class="project-category">Technology Made Simple / Web Basics</div>
+                        <h2 class="project-title" style="font-size:1.15rem;">
+                            <a href="./the-digital-waiter-how-apps-actually-talk-to-each-other/" style="color:inherit;text-decoration:none;">The &quot;Digital Waiter&quot;: How Apps Actually Talk to Each Other</a>
+                        </h2>
+                        <p class="project-description">Have you ever wondered how your phone &quot;knows&quot; what the weather is, or how the Uber app knows exactly where your driver is? The secret is something cal...</p>
+                        <div class="project-tech" style="margin-top:auto;">
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Feb 20, 2026
+                            </span>
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="clock" style="width:13px;height:13px;"></i> 2 min read
+                            </span>
+                        </div>
+                        <a href="./the-digital-waiter-how-apps-actually-talk-to-each-other/" class="project-view-button" style="text-decoration:none;margin-top:0.75rem;">
+                            Read Article <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card project-card blog-archive-card" data-category="Technology Made Simple / Daily Tech" data-title="where is &quot;the cloud&quot; actually? we hear it every day: &quot;save it to the cloud,&quot; or &quot;it’s backed up in the cloud.&quot; but if you look up at a rainy sky, you won’t find your vacation photos...">
+                    <a href="./where-is-the-cloud-actually/" class="project-image-container" style="display:block;">
+                        <img class="project-image" src="../blog/images/where-is-the-cloud-actually.png" alt="Where is &quot;The Cloud&quot; Actually?" loading="lazy">
+                    </a>
+                    <div class="project-content">
+                        <div class="project-category">Technology Made Simple / Daily Tech</div>
+                        <h2 class="project-title" style="font-size:1.15rem;">
+                            <a href="./where-is-the-cloud-actually/" style="color:inherit;text-decoration:none;">Where is &quot;The Cloud&quot; Actually?</a>
+                        </h2>
+                        <p class="project-description">We hear it every day: &quot;Save it to the cloud,&quot; or &quot;It’s backed up in the cloud.&quot; But if you look up at a rainy sky, you won’t find your vacation photos...</p>
+                        <div class="project-tech" style="margin-top:auto;">
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Feb 8, 2026
+                            </span>
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="clock" style="width:13px;height:13px;"></i> 2 min read
+                            </span>
+                        </div>
+                        <a href="./where-is-the-cloud-actually/" class="project-view-button" style="text-decoration:none;margin-top:0.75rem;">
+                            Read Article <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card project-card blog-archive-card" data-category="Technology Made Simple / Digital Trends" data-title="the secret behind the apps that never break have you ever wondered how apps like instagram or uber handle millions of people at the same time without crashing? it’s not just one giant computer r...">
+                    <a href="./the-secret-behind-the-apps-that-never-break/" class="project-image-container" style="display:block;">
+                        <img class="project-image" src="../blog/images/the-secret-behind-the-apps-that-never-break.png" alt="The Secret Behind the Apps That Never Break" loading="lazy">
+                    </a>
+                    <div class="project-content">
+                        <div class="project-category">Technology Made Simple / Digital Trends</div>
+                        <h2 class="project-title" style="font-size:1.15rem;">
+                            <a href="./the-secret-behind-the-apps-that-never-break/" style="color:inherit;text-decoration:none;">The Secret Behind the Apps That Never Break</a>
+                        </h2>
+                        <p class="project-description">Have you ever wondered how apps like Instagram or Uber handle millions of people at the same time without crashing? It’s not just one giant computer r...</p>
+                        <div class="project-tech" style="margin-top:auto;">
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Feb 4, 2026
+                            </span>
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="clock" style="width:13px;height:13px;"></i> 2 min read
+                            </span>
+                        </div>
+                        <a href="./the-secret-behind-the-apps-that-never-break/" class="project-view-button" style="text-decoration:none;margin-top:0.75rem;">
+                            Read Article <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card project-card blog-archive-card" data-category="Emerging Tech, Artificial Intelligence (AI)" data-title="do you know? the mind-blowing tech facts of 2026 technology isn&#39;t just changing how we work; it&#39;s changing the physical world around us. from the weight of the internet to computers that &quot;freeze&quot; to ...">
+                    <a href="./do-you-know-the-mindblowing-tech-facts-of-2026/" class="project-image-container" style="display:block;">
+                        <img class="project-image" src="../blog/images/do-you-know-the-mindblowing-tech-facts-of-2026.png" alt="Do You Know? The Mind-Blowing Tech Facts of 2026" loading="lazy">
+                    </a>
+                    <div class="project-content">
+                        <div class="project-category">Emerging Tech, Artificial Intelligence (AI)</div>
+                        <h2 class="project-title" style="font-size:1.15rem;">
+                            <a href="./do-you-know-the-mindblowing-tech-facts-of-2026/" style="color:inherit;text-decoration:none;">Do You Know? The Mind-Blowing Tech Facts of 2026</a>
+                        </h2>
+                        <p class="project-description">Technology isn&#39;t just changing how we work; it&#39;s changing the physical world around us. From the weight of the internet to computers that &quot;freeze&quot; to ...</p>
+                        <div class="project-tech" style="margin-top:auto;">
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Feb 1, 2026
+                            </span>
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="clock" style="width:13px;height:13px;"></i> 2 min read
+                            </span>
+                        </div>
+                        <a href="./do-you-know-the-mindblowing-tech-facts-of-2026/" class="project-view-button" style="text-decoration:none;margin-top:0.75rem;">
+                            Read Article <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card project-card blog-archive-card" data-category="Business, Entrepreneurship, Career Development" data-title="building your first website? 5 essential steps to success in 2026 1. define your purpose and tech stack before writing a single line of code, you need to decide how you’re building. • the cms route (wordpress, webflo...">
+                    <a href="./building-your-first-website-5-essential-steps-to-success-in-2026/" class="project-image-container" style="display:block;">
+                        <img class="project-image" src="../blog/images/building-your-first-website-5-essential-steps-to-success-in-2026.jpg" alt="Building Your First Website? 5 Essential Steps to Success in 2026" loading="lazy">
+                    </a>
+                    <div class="project-content">
+                        <div class="project-category">Business, Entrepreneurship, Career Development</div>
+                        <h2 class="project-title" style="font-size:1.15rem;">
+                            <a href="./building-your-first-website-5-essential-steps-to-success-in-2026/" style="color:inherit;text-decoration:none;">Building Your First Website? 5 Essential Steps to Success in 2026</a>
+                        </h2>
+                        <p class="project-description">1. Define Your Purpose and Tech Stack Before writing a single line of code, you need to decide how you’re building. • The CMS Route (WordPress, Webflo...</p>
+                        <div class="project-tech" style="margin-top:auto;">
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Jan 29, 2026
+                            </span>
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="clock" style="width:13px;height:13px;"></i> 2 min read
+                            </span>
+                        </div>
+                        <a href="./building-your-first-website-5-essential-steps-to-success-in-2026/" class="project-view-button" style="text-decoration:none;margin-top:0.75rem;">
+                            Read Article <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card project-card blog-archive-card" data-category="Modern Engineering" data-title="understanding system design: a beginner’s guide system design is the process of planning how software systems work, focusing on scalability, reliability, and performance. key components • client &amp; s...">
+                    <a href="./understanding-system-design-a-beginners-guide/" class="project-image-container" style="display:block;">
+                        <img class="project-image" src="../blog/images/understanding-system-design-a-beginners-guide.jpg" alt="Understanding System Design: A Beginner’s Guide" loading="lazy">
+                    </a>
+                    <div class="project-content">
+                        <div class="project-category">Modern Engineering</div>
+                        <h2 class="project-title" style="font-size:1.15rem;">
+                            <a href="./understanding-system-design-a-beginners-guide/" style="color:inherit;text-decoration:none;">Understanding System Design: A Beginner’s Guide</a>
+                        </h2>
+                        <p class="project-description">System design is the process of planning how software systems work, focusing on scalability, reliability, and performance. Key Components • Client &amp; S...</p>
+                        <div class="project-tech" style="margin-top:auto;">
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Jan 28, 2026
+                            </span>
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="clock" style="width:13px;height:13px;"></i> 2 min read
+                            </span>
+                        </div>
+                        <a href="./understanding-system-design-a-beginners-guide/" class="project-view-button" style="text-decoration:none;margin-top:0.75rem;">
+                            Read Article <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card project-card blog-archive-card" data-category="Technology, Innovation, Business" data-title="driving innovation in the digital world in today’s fast-paced digital landscape, staying ahead requires more than just keeping up—it demands innovation, vision, and a commitment to excellenc...">
+                    <a href="./driving-innovation-in-the-digital-world/" class="project-image-container" style="display:block;">
+                        <img class="project-image" src="../blog/images/driving-innovation-in-the-digital-world.png" alt="Driving Innovation in the Digital World" loading="lazy">
+                    </a>
+                    <div class="project-content">
+                        <div class="project-category">Technology, Innovation, Business</div>
+                        <h2 class="project-title" style="font-size:1.15rem;">
+                            <a href="./driving-innovation-in-the-digital-world/" style="color:inherit;text-decoration:none;">Driving Innovation in the Digital World</a>
+                        </h2>
+                        <p class="project-description">In today’s fast-paced digital landscape, staying ahead requires more than just keeping up—it demands innovation, vision, and a commitment to excellenc...</p>
+                        <div class="project-tech" style="margin-top:auto;">
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="calendar" style="width:13px;height:13px;"></i> Jan 28, 2026
+                            </span>
+                            <span class="tech-tag" style="display:inline-flex;align-items:center;gap:4px;">
+                                <i data-lucide="clock" style="width:13px;height:13px;"></i> 2 min read
+                            </span>
+                        </div>
+                        <a href="./driving-innovation-in-the-digital-world/" class="project-view-button" style="text-decoration:none;margin-top:0.75rem;">
+                            Read Article <i data-lucide="arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="footer-name">Muhammad Ghufran</div>
+                    <p class="footer-tagline">Full Stack Developer &amp; AI Integration Specialist</p>
+                    <p class="footer-description">Building modern web applications, scalable backends, and production engineering workflows.</p>
+                </div>
+                <div class="footer-links">
+                    <h4 class="footer-links-title">Quick Links</h4>
+                    <div class="footer-links-list">
+                        <a href="../index.html#services">Services</a>
+                        <a href="../index.html#about">About</a>
+                        <a href="../index.html#projects">Projects</a>
+                        <a href="../blog/">Articles</a>
+                        <a href="../index.html#contact">Contact</a>
+                    </div>
+                </div>
+                <div class="footer-connect">
+                    <h4 class="footer-connect-title">Connect</h4>
+                    <div class="footer-connect-list">
+                        <a href="mailto:me.ghufrannaseer@gmail.com">
+                            <i data-lucide="mail"></i>
+                            Email
+                        </a>
+                        <a href="https://www.linkedin.com/in/ghufran-naseer/" target="_blank" rel="noopener noreferrer">
+                            <i data-lucide="linkedin"></i>
+                            LinkedIn
+                        </a>
+                        <a href="https://github.com/GhufranNaseer" target="_blank" rel="noopener noreferrer">
+                            <i data-lucide="github"></i>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Muhammad Ghufran Naseer. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.className = savedTheme + '-theme';
+
+            document.querySelectorAll('.theme-toggle').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    const isDark = document.body.classList.contains('dark-theme');
+                    const next = isDark ? 'light' : 'dark';
+                    document.body.className = next + '-theme';
+                    localStorage.setItem('theme', next);
+                });
+            });
+
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileBtn && mobileMenu) {
+                mobileBtn.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('active');
+                    mobileBtn.classList.toggle('active');
+                });
+                mobileMenu.querySelectorAll('a').forEach(function (link) {
+                    link.addEventListener('click', function () {
+                        mobileMenu.classList.remove('active');
+                        mobileBtn.classList.remove('active');
+                    });
+                });
+            }
+
+            const copyBtn = document.getElementById('copy-link-btn');
+            if (copyBtn) {
+                copyBtn.addEventListener('click', function () {
+                    navigator.clipboard.writeText(window.location.href).then(function () {
+                        const label = copyBtn.querySelector('.copy-label');
+                        if (label) {
+                            const prev = label.textContent;
+                            label.textContent = 'Copied!';
+                            setTimeout(function () { label.textContent = prev; }, 2000);
+                        }
+                    });
+                });
+            }
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        })();
+    </script>
+    <script>
+        (function () {
+            const buttons = document.querySelectorAll('.blog-filter-btn');
+            const searchInput = document.getElementById('blog-search-input');
+            const cards = document.querySelectorAll('.blog-archive-card');
+            let activeCat = 'all';
+
+            function applyFilters() {
+                const q = (searchInput ? searchInput.value : '').trim().toLowerCase();
+                cards.forEach(function (card) {
+                    const cat = card.getAttribute('data-category');
+                    const text = card.getAttribute('data-title') || '';
+                    const matchesCat = activeCat === 'all' || cat === activeCat;
+                    const matchesQuery = !q || text.includes(q);
+                    card.style.display = matchesCat && matchesQuery ? 'flex' : 'none';
+                });
+            }
+
+            buttons.forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    buttons.forEach(function (b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    activeCat = btn.getAttribute('data-category') || 'all';
+                    applyFilters();
+                });
+            });
+
+            if (searchInput) {
+                searchInput.addEventListener('input', applyFilters);
+            }
+        })();
+    </script>
+</body>
+</html>

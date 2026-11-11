@@ -1,15 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-        <loc>https://ghufrannaseer.github.io</loc>
-        <lastmod>2026-03-16</lastmod>
-        <changefreq>monthly</changefreq>
+        <loc>https://ghufrannaseer.github.io/</loc>
+        <lastmod>2026-11-11</lastmod>
+        <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://ghufrannaseer.github.ioblog.html</loc>
-        <lastmod>2026-03-16</lastmod>
-        <changefreq>weekly</changefreq>
+        <loc>https://ghufrannaseer.github.io/blog/</loc>
+        <lastmod>2026-11-11</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://ghufrannaseer.github.io/blog/beyond-hydration-architecting-for-lcp-and-interaction-to-next-paint-inp/</loc>
+        <lastmod>2026-11-11</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ghufrannaseer.github.io/blog/the-microservices-revolution-scale-smarter-not-harder/</loc>
+        <lastmod>2026-03-12</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ghufrannaseer.github.io/blog/the-digital-waiter-how-apps-actually-talk-to-each-other/</loc>
+        <lastmod>2026-02-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ghufrannaseer.github.io/blog/where-is-the-cloud-actually/</loc>
+        <lastmod>2026-02-08</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ghufrannaseer.github.io/blog/the-secret-behind-the-apps-that-never-break/</loc>
+        <lastmod>2026-02-04</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ghufrannaseer.github.io/blog/do-you-know-the-mindblowing-tech-facts-of-2026/</loc>
+        <lastmod>2026-02-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ghufrannaseer.github.io/blog/building-your-first-website-5-essential-steps-to-success-in-2026/</loc>
+        <lastmod>2026-01-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ghufrannaseer.github.io/blog/understanding-system-design-a-beginners-guide/</loc>
+        <lastmod>2026-01-28</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
+        <loc>https://ghufrannaseer.github.io/blog/driving-innovation-in-the-digital-world/</loc>
+        <lastmod>2026-01-28</lastmod>
+        <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
 </urlset>

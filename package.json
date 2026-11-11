@@ -1,0 +1,15 @@
+{
+  "name": "ghufrannaseer-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Muhammad Ghufran Naseer portfolio with static SEO blog generator and daily automated publishing",
+  "scripts": {
+    "migrate": "node scripts/migrate-posts.mjs",
+    "build": "node scripts/build-blog.mjs",
+    "generate": "node scripts/generate-daily-post.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.52.0"
+  }
+}

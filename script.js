@@ -249,6 +249,7 @@ function closeMobileMenu() {
 // Typewriter Effect
 function initTypewriter() {
   const typewriterElement = document.getElementById('typewriter-text');
+  if (!typewriterElement) return;
 
   function typewriterEffect() {
     const currentText = roles[state.currentRole];
@@ -806,10 +807,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   renderBlogSkeletons();
 
-  fetch("https://my-blog-backend-phi.vercel.app/api/posts?author=ghufran")
+  fetch("data/posts.json")
     .then(response => response.json())
     .then(data => {
-      if (data.success && data.posts.length > 0) {
+      if (data && data.posts && data.posts.length > 0) {
         blogsGrid.innerHTML = "";
 
         data.posts.forEach(post => {
@@ -823,13 +824,13 @@ document.addEventListener("DOMContentLoaded", function () {
                                 <p class="project-description">${post.excerpt}</p>
                                 <div class="project-category">${post.category || 'Blog'}</div>
                                 <div class="project-tech">
-                                    <span class="tech-tag">Blog Post</span>
+                                    <span class="tech-tag">${post.readingTime || 'Blog Post'}</span>
                                     <span class="tech-tag" style="display: flex; align-items: center; gap: 4px;">
                                         <i data-lucide="calendar" style="width: 14px; height: 14px;"></i> 
                                         ${new Date(post.publishedAt || post.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
                                     </span>
                                 </div>
-                                <a href="blog.html?slug=${post.slug}" class="project-view-button" style="text-decoration: none;">
+                                <a href="blog/${post.slug}/" class="project-view-button" style="text-decoration: none;">
                                     Read Post <i data-lucide="arrow-right"></i>
                                 </a>
                             </div>

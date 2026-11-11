@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ghufrannaseer.github.io/sitemap.xml
