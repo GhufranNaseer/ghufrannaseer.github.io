@@ -40,9 +40,96 @@ const DOMAINS = [
 
 const MODELS = [
   'gemini-3-flash-preview',
-  'gemini-3.8-flash',
   'gemini-3.5-flash-lite',
+  'gemini-3.8-flash',
 ];
+
+function extractFirstJsonObject(raw = '') {
+  const cleaned = String(raw)
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/\s*```$/i, '')
+    .trim();
+
+  const start = cleaned.indexOf('{');
+  if (start === -1) {
+    throw new Error('No JSON object start brace found');
+  }
+
+  let depth = 0;
+  let inString = false;
+  let escaped = false;
+
+  for (let i = start; i < cleaned.length; i++) {
+    const ch = cleaned[i];
+    if (escaped) {
+      escaped = false;
+      continue;
+    }
+    if (ch === '\\' && inString) {
+      escaped = true;
+      continue;
+    }
+    if (ch === '"') {
+      inString = !inString;
+      continue;
+    }
+    if (!inString) {
+      if (ch === '{') depth++;
+      else if (ch === '}') {
+        depth--;
+        if (depth === 0) {
+          return cleaned.slice(start, i + 1);
+        }
+      }
+    }
+  }
+
+  return cleaned.slice(start);
+}
+
+function escapeRawControlCharsInStrings(jsonStr) {
+  let out = '';
+  let inString = false;
+  let escaped = false;
+
+  for (let i = 0; i < jsonStr.length; i++) {
+    const ch = jsonStr[i];
+    if (escaped) {
+      out += ch;
+      escaped = false;
+      continue;
+    }
+    if (ch === '\\' && inString) {
+      out += ch;
+      escaped = true;
+      continue;
+    }
+    if (ch === '"') {
+      inString = !inString;
+      out += ch;
+      continue;
+    }
+    if (inString) {
+      if (ch === '\n') { out += '\\n'; continue; }
+      if (ch === '\r') { out += '\\r'; continue; }
+      if (ch === '\t') { out += '\\t'; continue; }
+    }
+    out += ch;
+  }
+
+  return out;
+}
+
+function parseGeminiJsonResponse(rawText) {
+  const extracted = extractFirstJsonObject(rawText);
+  try {
+    return JSON.parse(extracted);
+  } catch {
+    const repaired = escapeRawControlCharsInStrings(extracted);
+    return JSON.parse(repaired);
+  }
+}
 
 function httpsPostJson(urlString, bodyObj, timeoutMs = 90000) {
   return new Promise((resolve, reject) => {
@@ -90,10 +177,11 @@ async function callGeminiJson(apiKey, prompt) {
       const { status, data } = await httpsPostJson(endpoint, {
         contents: [{ role: 'user', parts: [{ text: prompt }] }],
         generationConfig: {
-          temperature: 0.75,
+          temperature: 0.7,
+          maxOutputTokens: 8192,
           responseMimeType: 'application/json',
         },
-      }, 90000);
+      }, 120000);
 
       if (status < 200 || status >= 300) {
         throw new Error(`HTTP ${status} (${model}): ${data?.error?.message || JSON.stringify(data)}`);
@@ -108,13 +196,7 @@ async function callGeminiJson(apiKey, prompt) {
         throw new Error(`Empty response from ${model}`);
       }
 
-      const cleaned = rawText
-        .replace(/^```json\s*/i, '')
-        .replace(/^```\s*/i, '')
-        .replace(/\s*```$/i, '')
-        .trim();
-
-      return JSON.parse(cleaned);
+      return parseGeminiJsonResponse(rawText);
     } catch (err) {
       lastError = err;
       console.warn(`Model ${model} failed: ${err.message}`);
