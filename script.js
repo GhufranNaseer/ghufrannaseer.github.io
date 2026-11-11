@@ -648,11 +648,26 @@ function initContactForm() {
     e.preventDefault();
 
     const formData = new FormData(contactForm);
+    const name = String(formData.get('name') || '').trim();
+    const email = String(formData.get('email') || '').trim();
+    const subject = String(formData.get('subject') || '').trim();
+    const message = String(formData.get('message') || '').trim();
+    const time = new Date().toLocaleString('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short'
+    });
+
     const templateParams = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      subject: formData.get('subject'),
-      message: formData.get('message')
+      name,
+      email,
+      user_name: name,
+      user_email: email,
+      from_name: name,
+      from_email: email,
+      reply_to: email,
+      subject,
+      message,
+      time
     };
 
     // Show loading state
@@ -664,13 +679,27 @@ function initContactForm() {
     submitBtn.disabled = true;
 
     try {
-      // Try EmailJS first
-      await emailjs.sendForm(
+      // Send admin notification email
+      await emailjs.send(
         EMAILJS_CONFIG.SERVICE_ID,
         EMAILJS_CONFIG.TEMPLATE_CONTACT_ID,
-        contactForm,
+        templateParams,
         EMAILJS_CONFIG.PUBLIC_KEY
       );
+
+      // Send client auto-reply email
+      if (EMAILJS_CONFIG.TEMPLATE_AUTOREPLY_ID) {
+        try {
+          await emailjs.send(
+            EMAILJS_CONFIG.SERVICE_ID,
+            EMAILJS_CONFIG.TEMPLATE_AUTOREPLY_ID,
+            templateParams,
+            EMAILJS_CONFIG.PUBLIC_KEY
+          );
+        } catch (autoReplyError) {
+          console.warn('EmailJS Auto-Reply Error:', autoReplyError);
+        }
+      }
 
       // Show success message
       formStatus.className = 'form-status success';
