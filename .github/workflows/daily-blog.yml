@@ -1,9 +1,9 @@
-name: Daily Engineering Blog Publisher
+name: Weekly Engineering Blog Publisher
 
 on:
   schedule:
-    # Runs daily at 6:00 PM PKT (13:00 UTC)
-    - cron: '0 13 * * *'
+    # Runs weekly on Monday at 6:00 PM PKT (13:00 UTC)
+    - cron: '0 13 * * 1'
   workflow_dispatch:
 
 permissions:
